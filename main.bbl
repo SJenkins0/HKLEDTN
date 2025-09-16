@@ -17,6 +17,76 @@
 \endgroup
 
 \datalist[entry]{none/global//global/global}
+  \entry{TN91}{report}{}
+    \true{moreauthor}
+    \true{morelabelname}
+    \name{author}{1}{}{%
+      {{hash=JS}{%
+         family={Jenkins},
+         familyi={J\bibinitperiod},
+         given={S.},
+         giveni={S\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{JS+1}
+    \strng{fullhash}{JS+1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{{HK} {LI} {F}ibre {S}pecifications}
+    \list{location}{1}{%
+      {HK-TN-0091}%
+    }
+    \field{type}{\unskip\space}
+    \field{month}{08}
+    \field{year}{2025}
+  \endentry
+
+  \entry{FP400URT}{online}{}
+    \name{author}{1}{}{%
+      {{hash=T}{%
+         family={Thorlabs},
+         familyi={T\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{T1}
+    \strng{fullhash}{T1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{{FP400URT Datasheet}}
+    \verb{url}
+    \verb https://www.thorlabs.com/drawings/7ade35b092fac3f3-EFB2F350-971A-B4B4
+    \verb -29D36C92039FB538/FP400URT-SpecSheet.pdf
+    \endverb
+    \field{year}{2022}
+    \field{urlday}{17}
+    \field{urlmonth}{07}
+    \field{urlyear}{2025}
+  \endentry
+
+  \entry{TN42}{report}{}
+    \true{moreauthor}
+    \true{morelabelname}
+    \name{author}{1}{}{%
+      {{hash=BS}{%
+         family={Boyd},
+         familyi={B\bibinitperiod},
+         given={S.},
+         giveni={S\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{BS+1}
+    \strng{fullhash}{BS+1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{{H}yper-{K}amiokande Light Injector Diffuser Technical Note}
+    \list{location}{1}{%
+      {HK-TN-0042}%
+    }
+    \field{type}{\unskip\space}
+    \field{month}{05}
+    \field{year}{2023}
+  \endentry
+
   \entry{FR-4}{online}{}
     \name{author}{1}{}{%
       {{hash=ANEM}{%
@@ -135,28 +205,6 @@
     \verb asheet.pdf
     \endverb
     \field{year}{2023}
-    \field{urlday}{17}
-    \field{urlmonth}{07}
-    \field{urlyear}{2025}
-  \endentry
-
-  \entry{FP400URT}{online}{}
-    \name{author}{1}{}{%
-      {{hash=T}{%
-         family={Thorlabs},
-         familyi={T\bibinitperiod},
-      }}%
-    }
-    \strng{namehash}{T1}
-    \strng{fullhash}{T1}
-    \field{labelnamesource}{author}
-    \field{labeltitlesource}{title}
-    \field{title}{{FP400URT Datasheet}}
-    \verb{url}
-    \verb https://www.thorlabs.com/drawings/7ade35b092fac3f3-EFB2F350-971A-B4B4
-    \verb -29D36C92039FB538/FP400URT-SpecSheet.pdf
-    \endverb
-    \field{year}{2022}
     \field{urlday}{17}
     \field{urlmonth}{07}
     \field{urlyear}{2025}
