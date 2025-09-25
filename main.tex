@@ -81,7 +81,7 @@
 \section{Version history}
 \begin{itemize}
 \item v0.99 - First release by Balint circulated to Liverpool group for internal review
-\item v1 - [Sam]: Ported over to github for continued development, as we hit compilation time on overleaf. Initial pass through to fix wording and rewrite some sections. Also integrating Warwick TN on OD diffuser. Will add Liz's saturation studies as soon as these are available. Some reordering of structure to make it flow better.
+\item v1 - [Sam]: Ported over to github for continued development, as we hit compilation time on overleaf. Initial pass through to fix wording and rewrite some sections. Also integrating Warwick TN on OD diffuser, and Liz's work on the OD saturation studies. Some reordering of structure to make it flow better.
 \end{itemize}
 
 \newpage
@@ -143,7 +143,7 @@ A new LI generator has been written within the framework of WCSim~\cite{WCSim}. 
 
 The LI profile opening angle and intensity can reflect either a flat angular distribution of photons within the desired angular range of the light injector (-opening angle, +opening angle), or can be drawn from the measured profile for that injector, in which case the LI generator accurately models the variation across the profile, and in particular the drop-off in the frequency of photons towards the edge of the LI profile. For each pulse, the generator samples the specified number of photons per pulse, each with an energy calculated from the wavelength set in a database currently stored within WCSim, and a time sampled from a Gaussian distribution around the mean, with a variance equal to the pulse width specified in the database. Each photon is also assigned a global direction, which is sampled with a distribution corresponding to the LI profile.
 
-The profile of each diffuser will be measured and stored in the database as a function of the diffuser identifier number in the final simulation. For the purposes of the diffuser simulations presented in this tech note, a single diffuser profile taken from the measurement of a diffuser profile in water has been used. This diffuser profile corresponds to an opening angle of around 40\textdegree. Since the OD diffuser profiles have not yet been measured in water, an ID diffuser profile has been used to approximate a realistic OD diffuser profile. Although the design of the OD diffusers has been modified from the ID diffuser design in order to increase the diffuser efficiency, the design has been shown to maintain the desired profile and as such the ID diffuser profile is expected to be a reasonable approximation. The diffuser profile used, and the resulting charge map from a diffuser in the barrel is shown in \cref{fig:diffuserProfileSim}.
+The profile of each diffuser will be measured and stored in the database as a function of the diffuser identifier number in the final simulation. For the purposes of the diffuser simulations presented in this tech note, a single profile taken from the measurement of a diffuser profile in water has been used. This diffuser profile corresponds to an opening angle of around 40\textdegree. Since the OD diffuser profiles have not yet been measured in water, an ID diffuser profile has been used to approximate a realistic OD diffuser profile. Although the design of the OD diffusers has been modified from the ID diffuser design in order to increase the diffuser efficiency, the design has been shown to maintain the desired profile and as such the ID diffuser profile is expected to be a reasonable approximation. The diffuser profile used, and the resulting charge map from a diffuser in the barrel is shown in \cref{fig:diffuserProfileSim}.
 
 \begin{figure}
     \centering
@@ -166,7 +166,7 @@ The profile of each diffuser will be measured and stored in the database as a fu
 
 \subsection{Diffuser and OD Parameters}\label{subsec:params}
 
-The characteristics of diffusers simulated in the Saturation Study are summarised in \cref{tab:satStudyParams}. The number of photons per pulse used in the simulation was modified to account for optical photon attenuation in 100~m of optical fibre and a measured diffuser efficiency of 50\%. As such, the simulated number of photons per pulse is 5.5~M.
+The characteristics of diffusers simulated in the saturation study are summarised in \cref{tab:satStudyParams}. The number of photons per pulse used in the simulation was based on measurements made from the LED pulser setup, using a chain of fibre optic cables equating to 181~m in length. The simulations described here use a maximum photon yield from the fibre optic chain of $11\times10^6$ photons per pulse.  This was modified to account for an assumed diffuser efficiency of 50\%. As such, the simulated number of photons per pulse is $5.5\times10^6$.
 
 \begin{table}[h!]
     \centering
@@ -174,10 +174,9 @@ The characteristics of diffusers simulated in the Saturation Study are summarise
     \hline
         Parameter    & Assumed value \\
         \hline
-       Photons per pulse  &  23 M\\
+       Photons per pulse  &  $11\times10^6$\\
        Wavelength  & 365 nm \\
        Pulse width & 10~ns\\
-       Attenuation in 100 m of fibre & 50\%\\
        Diffuser efficiency & 50\%\\
        \hline
     \end{tabular}
@@ -251,7 +250,7 @@ The mean saturation distance and saturation limit were evaluated for two OD diff
     \centering
     \begin{tabular}{|c|c|c|c|c|}
     \hline
-        OD location & Mean saturation & \% PMTS within & Saturation  & \% PMTs within \\
+        OD location & Mean saturation & \% PMTs within & Saturation  & \% PMTs within \\
                     &  distance & saturation distance & limit &  saturation limit\\
         \hline
         Barrel 1        & 4.0~m & 31\%        & 5.0~m   & 50\% \\
