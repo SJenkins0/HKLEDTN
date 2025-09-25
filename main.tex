@@ -9,6 +9,7 @@
 \usepackage{url}
 \usepackage{graphicx}
 \usepackage{amsmath}
+\usepackage{tikz}
 \usepackage{siunitx}
 \usepackage[margin=1.1in]{geometry}
 \usepackage[capitalise,noabbrev] {cleveref}
@@ -70,7 +71,7 @@
 
 \begin{document}
 \title{Hyper-Kamiokande Outer Detector Light Injector System Technical Note}
-\author{Balint Bogdan\footnote{bbogdan@liverpool.ac.uk}, Sam Jenkins, Steve Boyd, Keith Jewkes, Menai Lamers James,\\Grace Hannaford, Ankush Mitra}
+\author{Balint Bogdan\footnote{bbogdan@liverpool.ac.uk}, Sam Jenkins, Neil McCauley, Steve Boyd, Keith Jewkes,\\Menai Lamers James, Grace Hannaford, Ankush Mitra}
 
 \maketitle
 
@@ -95,7 +96,53 @@ In order to achieve the precision measurements Hyper-K aims to make, precise cal
 
 \section{Light Injection System Overview and Requirements}
 
-The OD diffuser system will be composed of 122 bare diffusers, installed on the outward facing side of the PMT support structure. The diffuser design is discussed in \cref{sec:diffuser}. These will each be illuminated by individual LED pulser boards, with 365~nm LEDs. This will require at least 122 dedicated LED pulsers, and spares should be readily available for hot-swapping should a board encounter issues. Full details of the pulser board design are given in \cref{sec:LEDpulser}. The pulser boards will be powered and controlled by commercially-available Field Programmable Grid Array (FPGA) boards. The control system architecture for these consists of three primary components:
+The OD diffuser system will be composed of 122 bare diffusers, installed on the outward facing side of the PMT support structure. The proposed layout for this is shown in \cref{fig:ODdiffmap}, though in actuality there will be minor differences from this regular arrangement due to restrictions from other systems.
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}
+\draw[thick] (-4.5, -1.5) rectangle (4.5, 1.5);
+\draw[thick] (0, 3) circle (1.5cm);
+\draw[thick] (0, -3) circle (1.5cm);
+%barrel locations
+\foreach \x in {0,...,11}{
+	\foreach \y in {0,...,6}{
+		\ifodd \y \filldraw[black] (-4.5+\x*2*0.375, -1.125+\y*0.375) circle (2pt);
+		\else \filldraw[black] (-4.5+0.375+\x*2*0.375, -1.125+\y*0.375) circle (2pt);
+		\fi
+		}
+	}
+%topcap
+\foreach \y in {0,...,2}{
+	\foreach \x in {0,...,2}{
+		\filldraw[black] (-0.5+\x*0.5, 1.5+0.5+2*\y*0.5) circle (2pt);
+		}
+	}
+\foreach \y in {0,...,1}{
+	\foreach \x in {0,...,3}{
+		\filldraw[black] (-0.75+\x*0.5, 1.5+2*0.5+2*\y*0.5) circle (2pt);
+		}
+	}
+\foreach \x in {0,...,1}{
+	\filldraw[black] (-1+\x*2, 3) circle (2pt);
+	}
+%bottom cap
+\foreach \y in {0,...,2}{
+	\foreach \x in {0,...,2}{
+		\filldraw[black] (-0.5+\x*0.5, -1.5-0.5-2*\y*0.5) circle (2pt);
+		}
+	}
+\foreach \y in {0,...,1}{
+	\foreach \x in {0,...,3}{
+		\filldraw[black] (-0.75+\x*0.5, -1.5-2*0.5-2*\y*0.5) circle (2pt);
+		}
+	}
+\foreach \x in {0,...,1}{
+	\filldraw[black] (-1+\x*2, -3) circle (2pt);
+	}
+\end{tikzpicture}
+\caption{Injector location map for OD diffuser positions. Locations are approximate and dependent on PMT/WLS plate locations.}\label{fig:ODdiffmap}
+\end{figure}
+These are arranged such that they illuminate roughly an equal amount of OD PMTs. One of the primary goals of the system is to inject enough light to saturate the OD PMTs. This goal drives a large part of the photon output optimisation, and Monte Carlo (MC) studies to evaluate the amount of photons required to do this are shown in \cref{sec:saturation}. The diffuser design is discussed in \cref{sec:diffuser}. These will each be illuminated by individual LED pulser boards with 365~nm LEDs. This will require at least 122 dedicated LED pulsers, and spares should be readily available for hot-swapping should a board encounter issues. Full details of the pulser board design are given in \cref{sec:LEDpulser}. The pulser boards will be powered and controlled by commercially-available Field Programmable Grid Array (FPGA) boards. The control system architecture for these consists of three primary components:
 \begin{itemize}
 \item \textbf{Blade}: Interfaces directly with the FPGA, distributing all differential signals into the crate system.
 \item \textbf{Backplane}: Routes differential signals to the pulser boards and provides the primary power distribution, accepting \SI{12}{\volt} and \SI{\pm5}{\volt} inputs.
@@ -105,7 +152,7 @@ Further details on the control system and individual electronics crate component
 
 Light will be transported between the pulsers and diffusers by a series of fibre optic cables; following the investigations in \cite{TN91} the Thorlabs FP400URT \cite{FP400URT} is targeted for this. Due to production limitations, it is not possible to keep all fibre path lengths the same. Instead there will be five different lengths: 50~m, 80~m, 106~m, 124~m and 168~m. The light output after signal attenuation and dispersion in these fibres should be as consistent as possible, which will require fine tuning given the different amounts of attenuation and dispersion which pulses will experience based on fibre length.
 
-The initial design requirements for the system are to produce pulse widths out of the diffuser of between 1--10~ns, with a photon yield in the range 1--15 million photons per pulse (ppp). The 10~ns limit is driven by the timing resolution of the WLS plates. The photon yield target here is more of a goal than a requirement, and saturation studies were performed using numbers motivated by system performance. These are summarised in \cref{sec:saturation}.
+The initial design requirements for the system are to produce pulse widths out of the diffuser of no more than 10~ns, with a photon yield in the range 1--15 million photons per pulse (ppp). The 10~ns limit is driven by the timing resolution of the WLS plates. The wavelength of light used is also partially dictated by the WLS plates, which will not activate for light above 400~nm. The photon yield target here is more of a goal than a requirement, and saturation studies were performed using numbers motivated by system performance. These are summarised in \cref{sec:saturation}.
 
 {\color{red} The below paragraph should split up. The first half has been rewritten into the above paragraph, the second should be fleshed out for the photon yield test section.
 
@@ -390,7 +437,7 @@ Bare fibre re-insertion & 1.8 \\
 
 \subsection{OD Diffuser Design}
 
-The original intention was to use the same diffuser hemisphere design for the OD diffusers as will be used for the ID diffusers.  However, the standard diffuser emits less than 20\% of the power delivered by an optical fibre. As there are a number of interfaces in the optical pathway between the light source and the diffuser, and as the light source for the OD will be LEDs, this was considered too low to be able to effectively illuminate the OD space. Neither the number of interfaces in the optical chain, nor the light source can be changed easily, but it is possible that an alternate design of the diffuser hemisphere could yield more light.
+The original intention was to use the same diffuser hemisphere design for the OD diffusers as will be used for the ID diffusers.  However, the standard diffuser emits less than 20\% of the power delivered by an optical fibre. As there are a number of interfaces in the optical pathway between the light source and the diffuser, and as the light source for the OD will be LEDs, this was considered too low to be able to effectively saturate PMTs in the OD space, which is one of the primary design requirements of the system. Neither the number of interfaces in the optical chain, nor the light source can be changed easily, but it is possible that an alternate design of the diffuser hemisphere could yield more light.
 
 \begin{figure}
     \centering    
@@ -459,14 +506,20 @@ The OD space will be illuminated by a total of 122 OD diffusers, 19 on each of t
 \label{fig:od_diffuser_mount_pics}
 \end{figure*}
 
-Drawings for the OD diffuser prototype mount can be seen in \cref{fig:od_diffuser_mount} and pictures of the prototype can be seen in \cref{fig:od_diffuser_mount_pics}. The mount is made from stainless steel and is designed to hook over a horizontal frame bar, and screw in from the bottom. The PTFE mount is approximately 5 cm on a side. The fibre will be installed from the back and is held in place by a T-shaped component that is screwed down by the gondola worker.
+Drawings for the OD diffuser prototype mount can be seen in \cref{fig:od_diffuser_mount} and pictures of the prototype can be seen in \cref{fig:od_diffuser_mount_pics}. The mount is made from stainless steel and is designed to hook over a horizontal frame bar, and screw in from the bottom. The PTFE mount is approximately 5 cm on a side. The fibre will be installed from the back and is held in place by a T-shaped component that is screwed down by the gondola worker. An image of the prototype housing installed on the PMT support structure mockup next to a mechanical OD PMT and WLS plate is given in \cref{fig:ODPMTRAL}.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.8\textwidth]{OD PMT and LI mount.png}
+\caption{OD diffuser housing installed at the RAL mockup frame, next to an OD PMT and WLS plate.}\label{fig:ODPMTRAL}
+\end{figure}
 
 
 \section{Pulser Board}\label{sec:LEDpulser}
 
 \subsection{Pulser Board Overview}
 
-The pulser board was designed to be a more efficient and compact version compared to Super-Kamiokande UK Light Injection system, improving on efficiency, functionality, and light output. The pulser board is a rather simple board designed for low cost production. This section explains each circuit, component selection and design decision. As of writing, the board development is v0.9. v1.0 will be ready by September and will have only minor changes and adjustments compared to v0.9, mostly centered on refinement and removing the prototyping circuit. 
+The pulser board was designed to be a more efficient and compact version compared to Super-Kamiokande UK Light Injection system, improving on efficiency, functionality, and light output. The pulser board is a rather simple board designed for low cost production. This section explains each circuit, component selection and design decision. Minor changes are expected from the current design, mostly centred on removing prototyping circuitry. More details on the expected changes are given in \cref{ImGoingThroughChanges}.
 
 
 \subsection{Physical dimensions and construction}
@@ -671,14 +724,12 @@ During the prototyping phase, improvements were made to the PCB layout to better
 \begin{figure}[htbp]
 \centering
 \includegraphics[scale=0.5]{OldFibreCouplerDesign.png}
-\caption{Old Fibre Coupler Design\label{fig:OldFibreCouplerDesign}}
+\caption{Fibre Coupler Design\label{fig:OldFibreCouplerDesign}}
 \end{figure}
 
 To optimise the electrical path, capacitors have been repositioned as close as possible to the LEDs. This minimises parasitic inductance and resistance, while enabling a centralised layout of larger components. The resulting configuration creates a compact chamber housing both the LEDs and associated capacitors.
 
-An earlier design for the fibre coupler, which assumed uniform fibre lengths for all channels, has since been abandoned. The current approach for the LED light injection system adopts five different fibre lengths, necessitating individual light attenuation for each channel. This attenuation will be implemented within the coupler itself, allowing the LED output to remain within the electronically controlled dynamic range.
-
-The proposed design is modular, consisting of three components: a base section mounted to the pulser PCB, a top section into which the fibres will be epoxied, and an intermediate attenuator element. The latter will serve to space the fibre from the LED and thereby adjust the optical coupling efficiency to achieve the required attenuation. While an initial prototype will be developed in the near term for functional testing, the full design and validation of the fibre coupler will be undertaken later, once the required fibre lengths are fixed and unlikely to change. Should the project timeline require faster iteration, this can be pursued.
+The design for the fibre coupler is modular, consisting of three components: a base section mounted to the pulser PCB, a top section into which the fibres will be epoxied, and an intermediate attenuator element. The latter part will be added to the current design to space the fibre from the LED and thereby adjust the optical coupling efficiency to achieve required attenuation, accounting for the different lengths of fibre in the system. This means the attenuation will be implemented within the coupler itself, allowing the LED output to remain within the electronically controlled dynamic range.
 
 The fibre coupler will be fabricated via stereolithography (SLA) using a black resin to minimise light transmission through the material. Additional light-tight testing will be conducted, and black paint may be applied if further sealing is required. Furthermore, laser-cut rubber gaskets will be introduced at interface points to ensure optimal optical isolation and mechanical sealing.
 
@@ -696,7 +747,7 @@ Production will be carried out using PCB Train as they are local and competitive
 \end{figure}
 
 
-\subsection{Changes Expected from v0.9 to v1.0}
+\subsection{Changes Expected from v0.9 to v1.0}\label{ImGoingThroughChanges}
 
 \subsubsection{LED and Switching Circuit}
 
