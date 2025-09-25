@@ -63,6 +63,66 @@
     \field{urlyear}{2025}
   \endentry
 
+  \entry{TN64}{report}{}
+    \true{moreauthor}
+    \true{morelabelname}
+    \name{author}{3}{}{%
+      {{hash=LHyperKamiokandeOuterDetectorGroupD}{%
+         family={Lodovico},
+         familyi={L\bibinitperiod},
+         given={{\relax Hyper-Kamiokande Outer Detector Group:
+  }F.\bibnamedelima Di},
+         giveni={{\relax Hyper-Kamiokande Outer Detector Group:
+  }\bibinitperiod\bibinitdelim D\bibinitperiod},
+      }}%
+      {{hash=DE}{%
+         family={Drakopoulou},
+         familyi={D\bibinitperiod},
+         given={E.L.},
+         giveni={E\bibinitperiod},
+      }}%
+      {{hash=EG}{%
+         family={Erofeev},
+         familyi={E\bibinitperiod},
+         given={G.},
+         giveni={G\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{LHyperKamiokandeOuterDetectorGroupDDEEG+1}
+    \strng{fullhash}{LHyperKamiokandeOuterDetectorGroupDDEEG+1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{Outer Detector Technical Report}
+    \list{location}{1}{%
+      {HK-TN-0064}%
+    }
+    \field{type}{\unskip\space}
+    \field{year}{2022}
+  \endentry
+
+  \entry{WCSim}{online}{}
+    \name{author}{1}{}{%
+      {{hash=CHK}{%
+         family={Collaboration},
+         familyi={C\bibinitperiod},
+         given={Hyper-Kamiokande},
+         giveni={H\bibinithyphendelim K\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{CHK1}
+    \strng{fullhash}{CHK1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{{WCSim Version 1.12.26}}
+    \verb{url}
+    \verb https://github.com/WCSim/WCSim/releases/tag/v1.12.26
+    \endverb
+    \field{year}{2018}
+    \field{urlday}{16}
+    \field{urlmonth}{09}
+    \field{urlyear}{2025}
+  \endentry
+
   \entry{TN42}{report}{}
     \true{moreauthor}
     \true{morelabelname}
