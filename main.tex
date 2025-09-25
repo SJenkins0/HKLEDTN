@@ -112,7 +112,191 @@ The initial design requirements for the system are to produce pulse widths out o
 Pulse width should ideally be between 1-10~ns and the photon count from 1-15 million photons, but higher limits are preferable. The lower limits are not possible to achieve, as the fibre dispersion will create a minimum pulse width, which is 4.5~ns at 180~metres, and if we try to achieve large light output it will compromise our lower light output, so we can only achieve around 100,000 photons per pulse at minium. While these compromises are not ideal, the fibre selection limits our capabilities on hitting the required theoretical targets.
 }
 
-\section{OD PMT Saturation Studies}\label{sec:saturation}
+\section{OD PMT Saturation Study}\label{sec:saturation}
+
+The light injection system in the OD will use collimated and diffuse light injection to calibrate the PMTs and to measure the optical properties (scattering and attenuation) of water, as well as any degradation in Tyvek reflectivity over the course of operation. 
+
+Diffuse light sources will be used for in-situ calibration of the PMT charge response. Light will be injected at very low levels to measure the single-photoelectron charge response, and the requirement to achieve single-photoelectron coverage across all PMTs was used to determine the number of light injectors required for the light injection calibration system, as reported in the Outer Detector Technical Report~\cite{TN64}. In order to calibrate the PMTs across their entire range, the light injection system must also be capable of illuminating PMTs to saturation, to understand the change in their response as they approach saturation. 
+
+This section describes the use of diffuse light injection to evaluate the suitability of light sources for in-situ measurements of the PMT saturation response. \cref{subsec:LIsim} describes the diffuser simulation, \cref{subsec:params} gives details of the OD geometry and diffuser parameters used, and \cref{subsec:satStudy,subsec:results} describe the scope, analysis and results of the saturation study.
+
+\subsection{Light Injector Simulation}\label{subsec:LIsim}
+
+The planned light injection calibration system will consist of 122 sources, as determined by maximising the single-photoelectron coverage of all of the OD PMTs~\cite{TN64}. The division of sources between the endcaps and barrels, and their positions in terms of the overall geometry, has been altered since~\cite{TN64}, following an update of the design and geometry in the simulation. ~\cref{fig:diffuserPositions} shows the updated diffuse light injector (LI) with respect to OD PMT positions. The diffusers have been positioned as close to equidistant as possible from the surrounding PMTs, next to a strut in an empty cell. 
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.95\linewidth]{diffuser_PMT_positions.png}
+    \caption{Positions of the OD PMTs and diffuser positions used in the calibration simulations. Note that the positions of PMTs in the top and bottom rows of the barrel have changed in the design, and as such the results presented in this tech note reflect these changes. This differs from the most recent version of WCSim (1.12.26)~\cite{WCSim} that has been used as a basis for the simulation, and the changes are reflected in pull request \#525.}
+    \label{fig:diffuserPositions}
+\end{figure}
+
+A new LI generator has been written within the framework of WCSim~\cite{WCSim}. This allows the user to define the characteristics of the LI within a data file input to the simulation. The following characteristics can be defined:
+\begin{itemize}
+    \item Global position within the detector geometry,
+    \item Direction of the LI axis,
+    \item Wavelength of the optical photons
+    \item Pulse width
+    \item Photons per pulse
+    \item LI profile in the form of arrays of $\theta$, $\phi$ and measured light intensity, where $\theta$ is the angle made with the axis of the LI and $\phi$ is the rotation around the axis.
+\end{itemize}
+
+The LI profile opening angle and intensity can reflect either a flat angular distribution of photons within the desired angular range of the light injector (-opening angle, +opening angle), or can be drawn from the measured profile for that injector, in which case the LI generator accurately models the variation across the profile, and in particular the drop-off in the frequency of photons towards the edge of the LI profile. For each pulse, the generator samples the specified number of photons per pulse, each with an energy calculated from the wavelength set in a database currently stored within WCSim, and a time sampled from a Gaussian distribution around the mean, with a variance equal to the pulse width specified in the database. Each photon is also assigned a global direction, which is sampled with a distribution corresponding to the LI profile.
+
+The profile of each diffuser will be measured and stored in the database as a function of the diffuser identifier number in the final simulation. For the purposes of the diffuser simulations presented in this tech note, a single diffuser profile taken from the measurement of a diffuser profile in water has been used. This diffuser profile corresponds to an opening angle of around 40\textdegree. Since the OD diffuser profiles have not yet been measured in water, an ID diffuser profile has been used to approximate a realistic OD diffuser profile. Although the design of the OD diffusers has been modified from the ID diffuser design in order to increase the diffuser efficiency, the design has been shown to maintain the desired profile and as such the ID diffuser profile is expected to be a reasonable approximation. The diffuser profile used, and the resulting charge map from a diffuser in the barrel is shown in \cref{fig:diffuserProfileSim}.
+
+\begin{figure}
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+         \centering
+         \includegraphics[width=\linewidth]{Differ_profile.png}
+         \caption{ID diffuser profile measured in water, used for the diffuser simulations described in this technical report. A measured profile for each diffuser will be stored in the database for OD calibration.}
+         \label{fig:diffuserProfile}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}{0.5\textwidth}
+         \centering
+         \includegraphics[width=\linewidth,height=5cm]{diffuse_QCoverage.png}
+         \caption{Charge in photoelectrons on each PMT produced when the profile in (a) is used to simulate optical photons from a diffuser pointing outwards in the barrel OD. The size of the PMT + WLS plates has been increased only in the plot for improved visualisation.}
+         \label{fig:diffuserChargeMap}
+     \end{subfigure}
+     \caption{Diffuser profile measured in water, and the resulting charge map from this profile.}
+     \label{fig:diffuserProfileSim}
+\end{figure}
+
+\subsection{Diffuser and OD Parameters}\label{subsec:params}
+
+The characteristics of diffusers simulated in the Saturation Study are summarised in \cref{tab:satStudyParams}. The number of photons per pulse used in the simulation was modified to account for optical photon attenuation in 100~m of optical fibre and a measured diffuser efficiency of 50\%. As such, the simulated number of photons per pulse is 5.5~M.
+
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{|c|c|}
+    \hline
+        Parameter    & Assumed value \\
+        \hline
+       Photons per pulse  &  23 M\\
+       Wavelength  & 365 nm \\
+       Pulse width & 10~ns\\
+       Attenuation in 100 m of fibre & 50\%\\
+       Diffuser efficiency & 50\%\\
+       \hline
+    \end{tabular}
+    \caption{The LI configuration used in the diffuser simulations for the saturation study presented in \cref{subsec:satStudy}.}
+    \label{tab:satStudyParams}
+\end{table}
+
+The OD geometry parameters that have been used in the simulations for the saturation study are shown in \cref{tab:od_config}.
+
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{|c|c|}
+    \hline
+        Parameter    & Assumed value \\
+        \hline
+       PMT radius  &  8~cm\\
+       PMT dark rate & 0.4 kHz \\
+       OD lateral water depth  & 1 m \\
+       OD height water depth & 2 m\\
+       OD dead space & 60 cm \\
+       Tyvek sheet thickness & 1 mm\\
+       WLS plate thickness & 6 mm \\
+       WLS plate length & 30 cm \\
+       \hline
+    \end{tabular}
+    \caption{The OD configuration used for the saturation study presented in \cref{subsec:satStudy} using WCSim version 1.12.26.}
+    \label{tab:od_config}
+\end{table}
+
+
+
+\subsection{Saturation Study}\label{subsec:satStudy}
+
+The limit of the PMT range is governed by the electronics response, which is expected to fully saturate at around 100 photoelectrons (pe) in a 16~ns time window. The simulation of the PMT charge response in WCSim does not currently handle the saturation, but it is expected that the linearity of the charge response will break down between 80~pe and 100~pe. Saturation measurements aim to measure the PMTs over the full range of this breakdown in linearity. The saturation level for the purposes of this study has been taken to be 100~pe in 16~ns, but the analysis has been designed to take into account the need to measure across the entirety of this range.
+
+The saturation of OD PMTs has been evaluated in the top endcap, barrel and bottom endcap. The diffuser simulations are intensive, requiring millions of tracked photons to simulate a single flash. As such, only two diffusers in each of the top endcap, barrel and bottom endcap have been simulated for this current study.
+
+Two values have been used as figures of merit to determine the PMT saturation coverage:
+\begin{itemize}
+    \item Mean saturation distance - the distance from the nearest diffuser at which the mean charge per PMT is greater than saturation level.
+    \item Saturation limit - the greatest distance from the nearest diffuser at which the charge on any PMT reaches the saturation level.
+\end{itemize}
+
+For each configuration, the charge per PMT was plotted as a function of the distance from the nearest diffuser, to give the saturation limit (\cref{fig:maxSatDistPlot}). The mean saturation distance was then found by taking the mean of the same plot (\cref{fig:meanSatDistPlot}). The plot showing the saturation limit is particularly useful in understanding the range of distances over which it is possible to see the expected range of breakdown of linearity.
+
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}{0.49\textwidth}
+         \centering
+         \includegraphics[width=\linewidth, height=5.2cm]{charge_distance_reduced_diffuser_41_365.0_nm_10.0_ns_5500000_ppp_all.png}
+         \caption{Plot of the charge per PMT as a function of the distance from the nearest diffuser. The saturation limit is the greatest distance at which saturation is achieved i.e. 5.0~m in this case.}
+         \label{fig:maxSatDistPlot}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}{0.49\textwidth}
+         \centering
+         \includegraphics[width=\linewidth,height=5cm]{mean_charge_distance_reduced_diffuser_41_365.0_nm_10.0_ns_5500000_ppp_all.png}
+         \caption{Plot of the mean charge per PMT found by taking the mean of the left-hand plot. The mean saturation distance is the greatest distance at which the mean charge per PMT is greater than the saturation level i.e. 4.0~m.}
+         \label{fig:meanSatDistPlot}
+     \end{subfigure}
+     \caption{Sample plots showing the mean saturation distance and saturation limit used as figures of merit for the saturation study. The red, horizontal lines mark the assumed saturation level of 100~pe.}
+     \label{fig:satAnalysisPlots}
+\end{figure}
+
+Since only six diffuser locations have been simulated, the percentage of PMTs within the mean saturation distance and saturation limit is calculated assuming symmetry both of the detector and of the diffuser positions with respect to the PMTs. However, for practical reasons, the diffusers have to be positioned off-centre in the empty cells between PMTs, next to the struts on the PMT support structure. As such, a full simulation of all diffusers should be performed in future, once the OD geometry and LI specifications have been finalised, for an accurate evaluation of the percentage saturation across the whole detector.
+
+\subsection{Results}\label{subsec:results}
+
+The mean saturation distance and saturation limit were evaluated for two OD diffuser locations in each of the top endcap, barrel and bottom endcap. These are shown in \cref{tab:satStudyResults}, along with the percentage of PMTs within the mean saturation distance and saturation limit. \cref{tab:satStudyResults_pevalues} shows the mean charge at the calculated saturation distance and the mean charge at the saturation limit at the six diffuser positions.
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|}
+    \hline
+        OD location & Mean saturation & \% PMTS within & Saturation  & \% PMTs within \\
+                    &  distance & saturation distance & limit &  saturation limit\\
+        \hline
+        Barrel 1        & 4.0~m & 31\%        & 5.0~m   & 50\% \\
+        Barrel 2        & 4.0~m    & 31\%     & 5.0~m   & 50\% \\
+		Top endcap 1    & 3.7~m  & 27\%       & 3.9~m & 30\% \\
+        Top endcap 2    & 3.6~m  & 24\%       & 4.3~m & 37\% \\ 
+		Bottom endcap 1 & 3.6~m  & 24\%       & 4.3~m & 37\% \\
+		Bottom endcap 2 & 3.5~m  & 22\%       & 6.1~m & 66\% \\
+        \hline
+    \end{tabular}
+    \caption{Results for PMT saturation using the diffuser configuration detailed in \cref{tab:satStudyParams}.}
+    \label{tab:satStudyResults}
+\end{table}
+%
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{|c|c|c|c|}
+    \hline
+        OD location &Diffuser position & Mean charge (pe) at  & Mean charge (pe) at   \\
+                    &                  & saturation distance & saturation limit $\pm2\sigma$.  \\
+        \hline
+        Barrel 1       & (395.65,-3281.50,8.75 cm)   & 108  & 68 $\pm$ 12 \\ 
+        Barrel 2       & (3281.50,395.65,1705.55 cm) & 105  & 67 $\pm$ 11 \\ 
+        Top endcap 1   & (-70.7,-97.3,3350.82 cm)    & 106  & 96 $\pm$ 14 \\
+        Top endcap 2   & (-707,-968.2,3350.82 cm)    & 108  & 77 $\pm$ 13 \\
+        Bottom endcap 1 & (-707,-968.2,-3350.82 cm)  & 108  & 77 $\pm$ 14 \\ 
+        Bottom endcap 2 & (707,-1157.8,-3350.82 cm)  & 114  & 42 $\pm$ 11 \\ 
+        \hline
+    \end{tabular}
+    \caption{Results for PMT saturation using the diffuser configuration detailed in \cref{tab:satStudyParams}.}
+    \label{tab:satStudyResults_pevalues}
+\end{table}
+
+\cref{fig:pmtmap_with_limits} shows the PMT charge map for the Barrel 1 diffuser, with the saturation distance and saturation limits marked around the barrel PMTs.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.7\linewidth]{diffuse_QCoverage_with_limits.png}
+         \caption{Charge in pe on each PMT as a result of illumination with the Barrel 1 diffuser. The mean saturation distance and saturation limit around each PMT in the barrel are marked in red (smaller circles) and blue (larger circles) respectively.}
+         \label{fig:pmtmap_with_limits}
+\end{figure}
+
+Due to the differing geometry the mean saturation distance in the barrel (4.0~m) is slightly higher than in the endcaps (e.g. 3.6~m), and the percentage of PMTs within the mean saturation distance in the barrel is higher at 31\% than in the endcaps (22-27\%). Similarly, the percentage of PMTs within the saturation limit in the barrel is higher than in the endcaps, with the exception of the bottom endcap 2 diffuser, with 66\% of PMTs within the saturation limit of 6.1~m. It should be noted that changes to the OD geometry, including the addition of PMTs in the endcaps, are possible, and have not been taken into account in this simulation. 
+
+The diffuser position with respect to the surrounding PMTs has an observable effect on the saturation levels achieved. Where the diffuser positions with respect to surrounding PMTs are equivalent, as in the case of the two barrel diffusers, as well as the Bottom Endcap 1 and Top Endcap 2 diffusers, saturation levels are largely the same. However, the positions of the Top Endcap 1 and Bottom Endcap 2 diffuser each differ from all other diffusers simulated, resulting in different saturation distances and saturation limits.   Again, a full simulation of all diffuser positions should be carried out to fully evaluate achievable saturation across the whole detector, once all parameters and geometries have been finalised.
 
 \section{Diffuser Design}\label{sec:diffuser}
 \subsection{ID Diffuser Hemisphere Design}
