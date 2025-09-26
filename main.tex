@@ -156,7 +156,7 @@ The initial design requirements for the system are to produce pulse widths out o
 
 {\color{red} The below paragraph should split up. The first half has been rewritten into the above paragraph, the second should be fleshed out for the photon yield test section.
 
-Pulse width should ideally be between 1-10~ns and the photon count from 1-15 million photons, but higher limits are preferable. The lower limits are not possible to achieve, as the fibre dispersion will create a minimum pulse width, which is 4.5~ns at 180~metres, and if we try to achieve large light output it will compromise our lower light output, so we can only achieve around 100,000 photons per pulse at minium. While these compromises are not ideal, the fibre selection limits our capabilities on hitting the required theoretical targets.
+Pulse width should ideally be between 1-10~ns and the photon count from 1-15 million photons, but higher limits are preferable. The lower limits are not possible to achieve, as the fibre dispersion will create a minimum pulse width, which is 4.5~ns at 180~metres, and if we try to achieve large light output it will compromise our lower light output, so we can only achieve around 100,000 photons per pulse at minimum. While these compromises are not ideal, the fibre selection limits our capabilities on hitting the required theoretical targets.
 }
 
 \section{OD PMT Saturation Study}\label{sec:saturation}
@@ -598,12 +598,15 @@ The previous iteration of the pulser board utilised a BFR92 \cite{BFR92} high-sp
 
 The fastest commercially available gate driver identified was the Texas Instruments LMG1020 \cite{LMG1020}. This device supports pulse widths down to 1~ns, with typical rise and fall times of 400~ps. Additionally, it features an enable pin that allows for precise nanosecond pulse shaping \footnote{See page 12 and 13 in \cite{LMG1020}.}. The LMG1020 is compatible with both Gallium Nitride Field Effect Transistor (GaN) and Metal Oxide Semiconductor Field Effect Transistor (MOSFET) switches, broadening the scope for future component integration and experimentation. It is widely available and priced at £1.97 per unit in the quantities we will require for full production.
 
-For the switching element, enhancement-mode GaN transistors manufactured by EPC were selected due to their superior switching characteristics. This recommendation originated from Nick Braam, an engineer at the University of Victoria, who contributed to the pulser board design for the mPMT system. Two EPC devices were shortlisted: the EPC2012 \cite{EPC2012} and EPC8004 \cite{EPC8004}. The EPC2012 offers a simpler footprint, which could reduce manufacturing defects. However, the EPC8004 features lower parasitic capacitance, see \cref{fig:EPC2012Cap} for the EPC2012 values and \cref{fig:EPC8004Cap} for EPC8004 values, leading to better high-speed performance.
+For the switching element, enhancement-mode GaN transistors manufactured by EPC were selected due to their superior switching characteristics. This recommendation originated from Nick Braam, an engineer at the University of Victoria, who contributed to the pulser board design for the mPMT system \cite{TN52}. Two EPC devices were shortlisted: the EPC2012 \cite{EPC2012} and EPC8004 \cite{EPC8004}. The EPC2012 offers a simpler footprint, which could reduce manufacturing defects. However, the EPC8004 features lower parasitic capacitance, see \cref{fig:EPC2012Cap} for the EPC2012 values and \cref{fig:EPC8004Cap} for EPC8004 values, leading to better high-speed performance.
 
 To evaluate optical output performance, a 40~m length of FP400URT \cite{FP400URT} optical fibre, a Mouser-sourced 385~nm LED (ATS2012UV385 \cite{ATS2012UV385}), and a Hamamatsu H10721-210 \cite{H10721-210} PMT were used. The EPC-based configurations exhibited nearly identical pulse shapes, whereas the BFR92-based circuit's pulse shape was less sharp at identical pulse widths, as shown in \cref{fig:BFR92PulseShape}. Consequently, the EPC8004 (\cref{fig:EPC8004PulseShape}) was chosen for implementation. Optimal performance of the EPC GaN switches required careful layout considerations. A layout was developed in accordance with EPC's design guidelines \cite{EPCHSGuide}, targeting minimal parasitic inductance and capacitance. The design employs two layers placed directly above one another, utilising large copper planes and multiple vias to ensure uniform current distribution. The PCB will be fabricated and assembled by PCB Train, using their 0.8~mm thick, four-layer stack-up, which offers minimal inter-layer separation for optimal electrical performance (\cref{fig:PCBTrain0.84layer}). This same layout strategy was applied to the BFR92 circuit to provide a fair performance comparison.
 
 A significant challenge at low pulse widths is the presence of a trailing edge or “tail” in the LED output. This effect arises due to charge accumulation and the intrinsic capacitance of the LED, resulting in extended decay times and pulse broadening (see \cref{fig:NoRLPulse}). To mitigate this, a parallel modified snubber circuit was implemented, consisting of a 6.8~nH inductor and a 3.3~$\Omega$ current-limiting resistor. Upon LED turn-off, the inductor generates an electromotive force (EMF) that actively extracts residual charge from the LED, accelerating its shutdown. The effectiveness of this approach is illustrated in \cref{fig:RLPulse}.
 Additionally, two 0508 reverse-topology 100~nF capacitors have been incorporated. Their role is to act as local energy reservoirs, providing rapid current delivery to the LED during pulse operation, surpassing the response time of the main power supply.
+
+
+
 
 \begin{figure}[htbp]
 \centering
@@ -648,8 +651,25 @@ For testing purposes, the previous-generation United Kingdom Light Injection (UK
 
 Following comparative performance evaluations, the configuration using the EPC8004 switch was selected for continued use. While both the EPC8004 and EPC2012 switches exhibited similar electrical characteristics, the EPC8004 offered superior performance due to its lower parasitic capacitance, without any additional cost.
 The pulser board assembly was housed within a dark box during testing, and a 3D-printed fibre coupler was employed to facilitate light delivery. The initial focus of the evaluation was on the shape of the generated optical pulse.
-During component selection, it was observed that the LED previously sourced from Mouser (ATS2012UV385 by Kingbright) provided acceptable performance in terms of electrical characteristics, but the optical output was suboptimal. Additionally, this LED was found to be out of stock and obsolete at the time after testing, precluding further procurement. Subsequently, four ultraviolet LEDs from LC LED were assessed—two emitting at 365~nm and two at 395~nm—each in both 0805 and 0603 surface-mount packages. Results demonstrated that the 0805 package LEDs provided significantly better optical coupling efficiency with the FP400URT optical fibre. Furthermore, the 365~nm variant exhibited superior optical power output relative to the 395~nm counterparts.
-Based on these findings, the LC LED UT-67UV365P~\cite{ut-67uv365p} 365~nm LED was selected as the most suitable LED for this application.
+During component selection, it was observed that the LED previously sourced from Mouser (ATS2012UV385 by Kingbright) provided acceptable performance in terms of electrical characteristics, but the optical output was suboptimal, as it was showing a strange ``double pulsing'', which can be seen in \cref{fig:doublepulse}. Additionally, this LED was found to be out of stock and obsolete at the time after testing, precluding further procurement. 
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{doublepulse}
+\caption{Double pulse observed from the Kingbright ATS2012UV385 LED.}\label{fig:doublepulse}
+\end{figure}
+
+Subsequently, four ultraviolet LEDs from LC LED were assessed—two emitting at 365~nm and two at 395~nm—each in both 0805 and 0603 surface-mount packages. Results demonstrated that the 0805 package LEDs provided significantly better optical coupling efficiency with the FP400URT optical fibre. Furthermore, the 365~nm variant exhibited superior optical power output relative to the 395~nm counterparts.
+Based on these findings, the LC LED UT-67UV365P~\cite{ut-67uv365p} 365~nm LED was selected as the most suitable LED for this application. Tests showed the LED was behaved well, providing an optical pulse of 2.8~ns width, with 3.3~ns eletrical signal, as shown as \cref{fig:1LargePulse}. The pulse width deviation is 60.218~ps, or 2.12\% , and the histogram shows the pulse distribution.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{1LargePulse}
+\caption{Scope trace and pulse width histogram for a 3.3~ns input signal, through a 1~m FP400URT fibre.}\label{fig:1LargePulse}
+\end{figure}
+
+{\color{red} check this}
+A long torture test took place over the Christmas break as well. The pulser system was placed in a small dark box, and a new 365nm LED was soldered onto the pulser board. The pulse frequency was set to 30,000~Hz, and the pulse width was set to 2.8ns pulse width, which is effectively 6.8ns pulse after 180m of fibre. The system was running continuously for 13 days, while we took power and air temperature measurement every 10 seconds. The air temperature was measured at the power meter, using the Thorlab PM100USB. We are expecting to run the system at around 0.0082~Hz, as autocalib will pulse a channel at 1~Hz rate and there are 122 active channels. This means that pulsing the LED at 30~KHz for 13 days is equivalent of 106 849 years of normal running, not including the 1~KHz shorting calibration sessions. While we have not calibrated the temperature gain, we are estimating a 1.5 percent loss if we compare the same temperature from the beginning of the experiment to the end. %I dint know how to make this into a chart :(
 
 
 
@@ -670,7 +690,7 @@ The associated circuit was implemented in accordance with the manufacturer's rec
 
 Each pulser board is required to incorporate a variable voltage power supply dedicated to driving the LED, with an adjustable output range from 3~V to 12~V. This supply is used exclusively to modulate the LED’s light output by varying the forward voltage, and consequently the current. The design specification also necessitates that the power supply be remotely controllable—i.e., capable of being switched on or off via a simple logic-level signal.
 
-For this purpose, the LT1963A \cite{LT1963} adjustable low-dropout linear regulator was selected. This regulator has demonstrated reliable performance in previous pulser board iterations and offers a favourable balance of cost-effectiveness and controllability. The implementation includes standard filtering and decoupling, with layout details provided in \cref{fig:LT1963Layout}. The schematic provided in \cref{fig:12VVariablePSU} is an early version used for prototyping; the adjustable circuit has been simulated and will be tested shortly, and the enable circuit has been tested, modified and simplified. Updated schematics will be provided with v1.0 circuit.
+For this purpose, the LT1963A \cite{LT1963} adjustable low-dropout linear regulator was selected. This regulator has demonstrated reliable performance in previous pulser board iterations and offers a favourable balance of cost-effectiveness and controllability. The implementation includes standard filtering and decoupling, with layout details provided in \cref{fig:LT1963Layout}. The schematic provided in \cref{fig:12VVariablePSU} is an early version used for prototyping; the adjustable circuit has been simulated and will be tested shortly, and the enable circuit has been tested, modified and simplified. Updated schematics will be provided with v1.0 circuit. There will be overcurrent protection built in to the system as well. A ZXCT1051 (Reference!) is used to monitor the current and if it senses larger than normal current then it send a signal to the FPGA to turn the damaged board off. A surface mounted fuse will be added in line as well to make sure there is a second line of defense as well.
 
 \begin{figure}[htbp]
 \centering
@@ -796,6 +816,8 @@ The pulse control data structure is currently under development. There are two t
 
 Each LED channel will be controlled independently, allowing for unique pulse configurations across channels. The global trigger will be derived from the system clock, and each channel will pulse in a predefined sequence while triggered from the global trigger. This architecture also supports simultaneous pulsing of multiple channels. Should asynchronous behaviour be required, additional per-channel delay logic can be implemented. Given the five distinct fibre lengths used in the system, each channel group will also include a configurable delay offset to compensate for propagation time differences. These group delays will be calibrated and fixed, with the option of fine-tuning individual channels post-deployment if necessary.
 
+The repetition rate can be adjusted as well, including a single pulse, using external trigger, from 0.001Hz through 1~KHz to multiple megahertz if needed, but the system was only tested up to  30~KHz, as that was a high enough rate to illuminate the power monitor's sensor.
+
 The FPGA programming remains in active development. Inter-crate communication protocols and synchronisation are currently under integration and testing.
 
 \section{Crate Electronics}\label{sec:crate}
@@ -809,6 +831,8 @@ To achieve this, a system concept originally developed by ATLAS collaborators (s
 Each FPGA is capable of interfacing with up to 38 pulser boards, thereby maximising the utilisation of available LVDS differential pairs, with an additional pair reserved for the laser trigger signal. This configuration ensures full use of the Genesys 2’s I/O capacity while maintaining flexibility for future expansion.
 
 The system architecture consists of three primary components: the Blade (\cref{blade}), Backplane (\cref{backplane}) and Eurocard (\cref{eurocard}). This modular approach ensures scalability and facilitates debugging, replacement, and upgrades. It also provides a robust foundation for managing high channel counts while maintaining signal integrity and synchronisation across the system.
+
+We will have 4 crates in the system, which allows us to have up to 144 pulser boards while the system only requires 122 to run. This means we will have 22 spare boards, which will allow us to have 5 sets of 4 boards, a set of four for each fibre length, that can be used for hot swapping. A local technician can remove the signal and monitor fibre from the broken pulser board, attach it to a spare board and reconfigure the software to use the spare board for running, all with an expert guidance. Next time an expert is on site they can do further maintenance or repair if needed. 
 
 \subsection{Blade}\label{blade}
 
