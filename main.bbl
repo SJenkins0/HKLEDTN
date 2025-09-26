@@ -220,6 +220,30 @@
     \field{urlyear}{2025}
   \endentry
 
+  \entry{TN52}{report}{}
+    \true{moreauthor}
+    \true{morelabelname}
+    \name{author}{1}{}{%
+      {{hash=BN}{%
+         family={Braam},
+         familyi={B\bibinitperiod},
+         given={N.},
+         giveni={N\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{BN+1}
+    \strng{fullhash}{BN+1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{{LED}-m{PMT}s for Hyper{K}}
+    \list{location}{1}{%
+      {HK-TN-0052}%
+    }
+    \field{type}{\unskip\space}
+    \field{month}{10}
+    \field{year}{2023}
+  \endentry
+
   \entry{EPC2012}{online}{}
     \name{author}{1}{}{%
       {{hash=CEPC}{%
