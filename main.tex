@@ -71,7 +71,8 @@
 
 \begin{document}
 \title{Hyper-Kamiokande Outer Detector Light Injector System Technical Note}
-\author{Balint Bogdan\footnote{bbogdan@liverpool.ac.uk}, Sam Jenkins, Neil McCauley, Steve Boyd, Keith Jewkes,\\Menai Lamers James, Grace Hannaford, Ankush Mitra}
+\author{Balint Bogdan\footnote{bbogdan@liverpool.ac.uk}, Sam Jenkins, Neil McCauley, Steve Boyd, Keith Jewkes,\\Menai Lamers James, Grace Hannaford, Ankush Mitra, Liz Kneale,
+\\Patrick Stowell}
 
 \maketitle
 
@@ -154,7 +155,7 @@ Light will be transported between the pulsers and diffusers by a series of fibre
 
 The initial design requirements for the system are to produce pulse widths out of the diffuser of no more than 10~ns, with a photon yield in the range 1--15 million photons per pulse (ppp). The 10~ns limit is driven by the timing resolution of the WLS plates. The wavelength of light used is also partially dictated by the WLS plates, which will not activate for light above 400~nm. The photon yield target here is more of a goal than a requirement, and saturation studies were performed using numbers motivated by system performance. These are summarised in \cref{sec:saturation}.
 
-{\color{red} The below paragraph should split up. The first half has been rewritten into the above paragraph, the second should be fleshed out for the photon yield test section.
+{\color{red} The below paragraph should split up. The first half has been rewritten into the above paragraph, the second should be fleshed out for the photon yield test section. This will be removed once that is done.
 
 Pulse width should ideally be between 1-10~ns and the photon count from 1-15 million photons, but higher limits are preferable. The lower limits are not possible to achieve, as the fibre dispersion will create a minimum pulse width, which is 4.5~ns at 180~metres, and if we try to achieve large light output it will compromise our lower light output, so we can only achieve around 100,000 photons per pulse at minimum. While these compromises are not ideal, the fibre selection limits our capabilities on hitting the required theoretical targets.
 }
@@ -522,7 +523,7 @@ Drawings for the OD diffuser prototype mount can be seen in \cref{fig:od_diffuse
 The pulser board was designed to be a more efficient and compact version compared to Super-Kamiokande UK Light Injection system, improving on efficiency, functionality, and light output. The pulser board is a rather simple board designed for low cost production. This section explains each circuit, component selection and design decision. Minor changes are expected from the current design, mostly centred on removing prototyping circuitry. More details on the expected changes are given in \cref{ImGoingThroughChanges}.
 
 
-\subsection{Physical dimensions and construction}
+\subsection{Physical Dimensions and Construction}
 
 The dimensions of the Printed Circuit Board (PCB) were selected to be as compact as practicable, while still providing sufficient area for the secure mounting of a fibre coupler and for the components. The final board size is 50~mm~$\times$~30~mm. This configuration permits electrically noisy components, such as switching power supplies and the Low Voltage Differential Signal to Transistor Transistor Logic (LVDS-to-TTL) converter to be positioned at a maximum distance from the switching circuitry, thereby minimising potential electromagnetic interference.
 
@@ -773,11 +774,11 @@ Production will be carried out using PCB Train as they are local and competitive
 
 There will be minimal changes to the LED and switching circuit. Changes will be made to the position of the switching devices, placing them slightly closer to each other to reduce transmission line length. The LED will likely remain as the LC LED UT-67UV365P 365nm 0805 LED, but further LED tests will be performed. This takes a short amount of time, and may lead to discovering better LEDs in the future which would be easy to swap in due to standardised footprints.
 
-\subsubsection{LVDS-to-TTL converter}
+\subsubsection{LVDS-to-TTL Converter}
 
 No changes are expected to this circuit.
 
-\subsubsection{Power supplies}
+\subsubsection{Power Supplies}
 
 Reverse voltage bias will be removed as no difference between normal and reverse bias was observed photon output. The overcurrent protection and power enable circuit will be reworked.
 
@@ -785,7 +786,7 @@ Reverse voltage bias will be removed as no difference between normal and reverse
 
 No changes are expected to this.
 
-\subsubsection{Fibre coupler}
+\subsubsection{Fibre Coupler}
 
 A brand new fibre coupler will be designed due to the recent requirement changes regarding the different fibre lengths.
 
