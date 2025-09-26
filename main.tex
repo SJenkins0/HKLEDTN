@@ -162,15 +162,15 @@ Pulse width should ideally be between 1-10~ns and the photon count from 1-15 mil
 
 \section{OD PMT Saturation Study}\label{sec:saturation}
 
-The light injection system in the OD will use collimated and diffuse light injection to calibrate the PMTs and to measure the optical properties (scattering and attenuation) of water, as well as any degradation in Tyvek reflectivity over the course of operation. 
+The light injection system in the OD will use collimated and diffuse light injection to calibrate the PMTs and to measure the optical properties (scattering and absorption) of water, as well as any degradation in Tyvek reflectivity over the course of operation. 
 
 Diffuse light sources will be used for in-situ calibration of the PMT charge response. Light will be injected at very low levels to measure the single-photoelectron charge response, and the requirement to achieve single-photoelectron coverage across all PMTs was used to determine the number of light injectors required for the light injection calibration system, as reported in the Outer Detector Technical Report~\cite{TN64}. In order to calibrate the PMTs across their entire range, the light injection system must also be capable of illuminating PMTs to saturation, to understand the change in their response as they approach saturation. 
 
-This section describes the use of diffuse light injection to evaluate the suitability of light sources for in-situ measurements of the PMT saturation response. \cref{subsec:LIsim} describes the diffuser simulation, \cref{subsec:params} gives details of the OD geometry and diffuser parameters used, and \cref{subsec:satStudy,subsec:results} describe the scope, analysis and results of the saturation study.
+This section describes the use of diffuse light injection to evaluate the suitability of light sources for in-situ measurements of the PMT saturation response. \cref{subsec:LIsim} describes the diffuser simulation, \cref{subsec:params} gives details of the OD geometry and diffuser parameters used, and \cref{subsec:satStudy,subsec:satResults} describe the scope, analysis and results of the saturation study.
 
-\subsection{Light Injector Simulation}\label{subsec:LIsim}
+\subsection{Diffuser Simulation}\label{subsec:LIsim}
 
-The planned light injection calibration system will consist of 122 sources, as determined by maximising the single-photoelectron coverage of all of the OD PMTs~\cite{TN64}. The division of sources between the endcaps and barrels, and their positions in terms of the overall geometry, has been altered since~\cite{TN64}, following an update of the design and geometry in the simulation. ~\cref{fig:diffuserPositions} shows the updated diffuse light injector (LI) with respect to OD PMT positions. The diffusers have been positioned as close to equidistant as possible from the surrounding PMTs, next to a strut in an empty cell. 
+The planned light injection calibration system will include 122 diffusers, as determined by maximising the single-photoelectron coverage of all of the OD PMTs~\cite{TN64}. The division of diffusers between the endcaps and barrels, and their positions in terms of the overall geometry, has been altered since~\cite{TN64}, following an update of the design and geometry in the simulation. ~\cref{fig:diffuserPositions} shows the updated diffuse light injector (LI) locations with respect to OD PMT positions. The diffusers have been positioned as close to equidistant as possible from the surrounding PMTs, next to a strut in an empty cell. 
 
 \begin{figure}
     \centering
@@ -216,7 +216,7 @@ The profile of each diffuser will be measured and stored in the database as a fu
 
 The characteristics of diffusers simulated in the saturation study are summarised in \cref{tab:satStudyParams}. The number of photons per pulse used in the simulation was based on measurements made from the LED pulser setup, using a chain of fibre optic cables equating to 181~m in length. The simulations described here use a maximum photon yield from the fibre optic chain of $11\times10^6$ photons per pulse.  This was modified to account for an assumed diffuser efficiency of 50\%. As such, the simulated number of photons per pulse is $5.5\times10^6$.
 
-\begin{table}[h!]
+\begin{table}[ht!]
     \centering
     \begin{tabular}{|c|c|}
     \hline
@@ -234,7 +234,7 @@ The characteristics of diffusers simulated in the saturation study are summarise
 
 The OD geometry parameters that have been used in the simulations for the saturation study are shown in \cref{tab:od_config}.
 
-\begin{table}[h!]
+\begin{table}[ht!]
     \centering
     \begin{tabular}{|c|c|}
     \hline
@@ -256,7 +256,7 @@ The OD geometry parameters that have been used in the simulations for the satura
 
 
 
-\subsection{Saturation Study}\label{subsec:satStudy}
+\subsection{Saturation Analysis}\label{subsec:satStudy}
 
 The limit of the PMT range is governed by the electronics response, which is expected to fully saturate at around 100 photoelectrons (pe) in a 16~ns time window. The simulation of the PMT charge response in WCSim does not currently handle the saturation, but it is expected that the linearity of the charge response will break down between 80~pe and 100~pe. Saturation measurements aim to measure the PMTs over the full range of this breakdown in linearity. The saturation level for the purposes of this study has been taken to be 100~pe in 16~ns, but the analysis has been designed to take into account the need to measure across the entirety of this range.
 
@@ -270,7 +270,7 @@ Two values have been used as figures of merit to determine the PMT saturation co
 
 For each configuration, the charge per PMT was plotted as a function of the distance from the nearest diffuser, to give the saturation limit (\cref{fig:maxSatDistPlot}). The mean saturation distance was then found by taking the mean of the same plot (\cref{fig:meanSatDistPlot}). The plot showing the saturation limit is particularly useful in understanding the range of distances over which it is possible to see the expected range of breakdown of linearity.
 
-\begin{figure}[h!]
+\begin{figure}[ht!]
     \centering
     \begin{subfigure}{0.49\textwidth}
          \centering
@@ -291,10 +291,10 @@ For each configuration, the charge per PMT was plotted as a function of the dist
 
 Since only six diffuser locations have been simulated, the percentage of PMTs within the mean saturation distance and saturation limit is calculated assuming symmetry both of the detector and of the diffuser positions with respect to the PMTs. However, for practical reasons, the diffusers have to be positioned off-centre in the empty cells between PMTs, next to the struts on the PMT support structure. As such, a full simulation of all diffusers should be performed in future, once the OD geometry and LI specifications have been finalised, for an accurate evaluation of the percentage saturation across the whole detector.
 
-\subsection{Results}\label{subsec:results}
+\subsection{Results}\label{subsec:satResults}
 
 The mean saturation distance and saturation limit were evaluated for two OD diffuser locations in each of the top endcap, barrel and bottom endcap. These are shown in \cref{tab:satStudyResults}, along with the percentage of PMTs within the mean saturation distance and saturation limit. \cref{tab:satStudyResults_pevalues} shows the mean charge at the calculated saturation distance and the mean charge at the saturation limit at the six diffuser positions.
-\begin{table}[h!]
+\begin{table}[ht!]
     \centering
     \begin{tabular}{|c|c|c|c|c|}
     \hline
@@ -313,19 +313,19 @@ The mean saturation distance and saturation limit were evaluated for two OD diff
     \label{tab:satStudyResults}
 \end{table}
 %
-\begin{table}[h!]
+\begin{table}[ht!]
     \centering
     \begin{tabular}{|c|c|c|c|}
     \hline
-        OD location &Diffuser position & Mean charge (pe) at  & Mean charge (pe) at   \\
-                    &                  & saturation distance & saturation limit $\pm2\sigma$.  \\
+        OD location &Diffuser position & Mean charge (pe)   & Mean charge (pe)    \\
+                    &  (cm)                & at sat. distance & at sat. limit $\pm2\sigma$.  \\
         \hline
-        Barrel 1       & (395.65,-3281.50,8.75 cm)   & 108  & 68 $\pm$ 12 \\ 
-        Barrel 2       & (3281.50,395.65,1705.55 cm) & 105  & 67 $\pm$ 11 \\ 
-        Top endcap 1   & (-70.7,-97.3,3350.82 cm)    & 106  & 96 $\pm$ 14 \\
-        Top endcap 2   & (-707,-968.2,3350.82 cm)    & 108  & 77 $\pm$ 13 \\
-        Bottom endcap 1 & (-707,-968.2,-3350.82 cm)  & 108  & 77 $\pm$ 14 \\ 
-        Bottom endcap 2 & (707,-1157.8,-3350.82 cm)  & 114  & 42 $\pm$ 11 \\ 
+        Barrel 1       & (395.65,-3281.50,8.75)   & 108  & 68 $\pm$ 12 \\ 
+        Barrel 2       & (3281.50,395.65,1705.55) & 105  & 67 $\pm$ 11 \\ 
+        Top endcap 1   & (-70.7,-97.3,3350.82)    & 106  & 96 $\pm$ 14 \\
+        Top endcap 2   & (-707,-968.2,3350.82)    & 108  & 77 $\pm$ 13 \\
+        Bottom endcap 1 & (-707,-968.2,-3350.82)  & 108  & 77 $\pm$ 14 \\ 
+        Bottom endcap 2 & (707,-1157.8,-3350.82)  & 114  & 42 $\pm$ 11 \\ 
         \hline
     \end{tabular}
     \caption{Results for PMT saturation using the diffuser configuration detailed in \cref{tab:satStudyParams}.}
@@ -334,7 +334,7 @@ The mean saturation distance and saturation limit were evaluated for two OD diff
 
 \cref{fig:pmtmap_with_limits} shows the PMT charge map for the Barrel 1 diffuser, with the saturation distance and saturation limits marked around the barrel PMTs.
 
-\begin{figure}
+\begin{figure}[ht!]
 \centering
 \includegraphics[width=0.7\linewidth]{diffuse_QCoverage_with_limits.png}
          \caption{Charge in pe on each PMT as a result of illumination with the Barrel 1 diffuser. The mean saturation distance and saturation limit around each PMT in the barrel are marked in red (smaller circles) and blue (larger circles) respectively.}
@@ -344,6 +344,88 @@ The mean saturation distance and saturation limit were evaluated for two OD diff
 Due to the differing geometry the mean saturation distance in the barrel (4.0~m) is slightly higher than in the endcaps (e.g. 3.6~m), and the percentage of PMTs within the mean saturation distance in the barrel is higher at 31\% than in the endcaps (22-27\%). Similarly, the percentage of PMTs within the saturation limit in the barrel is higher than in the endcaps, with the exception of the bottom endcap 2 diffuser, with 66\% of PMTs within the saturation limit of 6.1~m. It should be noted that changes to the OD geometry, including the addition of PMTs in the endcaps, are possible, and have not been taken into account in this simulation. 
 
 The diffuser position with respect to the surrounding PMTs has an observable effect on the saturation levels achieved. Where the diffuser positions with respect to surrounding PMTs are equivalent, as in the case of the two barrel diffusers, as well as the Bottom Endcap 1 and Top Endcap 2 diffusers, saturation levels are largely the same. However, the positions of the Top Endcap 1 and Bottom Endcap 2 diffuser each differ from all other diffusers simulated, resulting in different saturation distances and saturation limits.   Again, a full simulation of all diffuser positions should be carried out to fully evaluate achievable saturation across the whole detector, once all parameters and geometries have been finalised.
+
+\section{OD Collimator Studies}\label{sec:collimator_studies}
+
+Collimated light sources will be used to make measurements of scattering and absorption in water, and Tyvek reflectivity. These will be used to calibrate for changes in the detector properties over time. This will require untangling the effect of each of the properties in order to discriminate changes in each of the properties. The first step is to evaluate the sensitivity of collimators to changes in each of the properties separately. 
+
+This section presents the collimator sensitivity studies which were carried out prior to updates to the OD geometry and more recent updates to the light-injector simulation. \cref{subsec:collSim} describes the positioning of collimators, and the simulation method. The analysis of sensitivity to water properties and Tyvek reflectivity are presented in \cref{subsec:collAnalysis}, and the results are presented in \cref{subsec:collResults}.
+
+\subsection{Collimator Simulation}\label{subsec:collSim}
+
+The collimated light sources were simulated using the LI simulation described in \cref{subsec:LIsim}. For this collimator study, a flat profile with an opening angle of 2\textdegree ~was taken as the baseline, and the OD configuration described in \cref{tab:od_config} in \cref{subsec:params} was used. \cref{fig:collMap} shows the charge map produced by the 2\textdegree ~collimator source in the top endcap.
+
+ \begin{figure}[ht!]
+     \centering
+     \includegraphics[width=0.5\linewidth]{images/hitmapColl.png}
+     \caption{Distribution of charge collected in end cap PMTs for a collimated
+beam of light injected from the right hand side, travelling across the diameter of the OD to the left hand side.}
+     \label{fig:collMap}
+ \end{figure}
+
+The sensitivity of each of the collimators to changes in absorption, Rayleigh scattering and Tyvek reflectivity was evaluated by varying each property one at a time, scanning over values up to 30\% either side of the nominal value for absorption and scattering, and 30\% lower than than the expected value for Tyvek reflectivity. Nominal values have been extrapolated from Super-Kamiokande measured values in the case of scattering and absorption, and from the expected value in the case of the Tyvek reflectivity. These values and the range of the scans over each property are shown in \cref{fig:collimatorScans}.
+
+\begin{figure}[ht!]
+    \centering
+    \begin{subfigure}{0.32\textwidth}
+         \centering
+         \includegraphics[width=\linewidth]{images/AbsorptionLength.png}
+         \caption{Absorption length}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}{0.32\textwidth}
+         \centering
+         \includegraphics[width=\linewidth]{images/RayleighScatteringLength.png}
+         \caption{Rayleigh scattering}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}{0.32\textwidth}
+         \centering
+         \includegraphics[width=\linewidth]{images/TyvekReflectivity.png}
+         \caption{Tyvek reflectivity}
+     \end{subfigure}
+     \caption{Nominal (black, solid), maximum (blue, dashed) and minimum (red, dot-dashed) values for the scans over absorption length and Rayleigh scattering, and nominal (black, solid) and minimum (red, dot-dashed) values for the scans over Tyvek reflectivity.}
+     \label{fig:collimatorScans}
+\end{figure}
+
+Variable steps were chosen for the scan over the range for each property to allow sufficiently detailed evaluation of the sensitivity to changes in each property. For absorption and scattering, the parameters are varied in steps of 1\% between $\pm$5\%, where finer binning is required to see the small effects at these variations. From 5\% to 30\% either side of the nominal, the parameters were varied in 5\% steps. For Tyvek reflectivity, the parameter is reduced by up to 30\% either side of the nominal, in 0.5\% steps up to $\pm$5\%, 1\% steps between $\pm$5\% and $\pm$10\% and in 5\% steps above that. 
+
+The scans over the variation in parameters require at least 21 individual simulations per property, and each simulation requires $\mathcal{O}$(100M) photons to produce sufficient statistics. In addition, the OD geometry remains in flux. As such, although the OD light injection system will include 12 OD collimators, a single collimator in each of the OD top endcap, barrel and bottom endcap was simulated for the purposes of these studies.
+
+
+\subsection{Collimator Sensitivity Analysis}\label{subsec:collAnalysis}
+
+To evaluate the sensitivty of the collimator to each of the parameters, the distribution of charged collected in the PMTs as a function of the distance from the light injector was compared over the scan ranges detailed in \cref{subsec:collSim}. These were compared using a Pearson's chi-squared test:
+\begin{equation}
+	\chi ^2 = \sum^S_{s=0}\frac{(O_s-E_s)^2}{E_s},
+\end{equation}
+where the expected value $E_s$ is the charge on the PMTs at distance $s$ for the nominal parameter value, and the observed value $O_s$ is the charge on the PMTs at distance $s$ for the  varied parameter value. In this way, the distribution of chi-squared values as a function of the percentage change in parameter value indicates the sensitivity of the collimator to the changes in each of the properties. For the baseline analyis, only PMTs located in the same part of the detector were included in the chi-square calculation.
+
+Errors on the chi-squared statistic were calculated by splitting the sample into 10 sub-samples, calculating the Pearson’s chi-squaredtest statistic for each sub-sample and then calculating a relative standard deviation from the variance between the sub-samples.
+
+%In an attempt to begin to disentangle the affects of variations of the different parameters...
+
+\subsection{Results}\label{subsec:collResults}
+
+\cref{fig:barrelAllParams} shows the chi-squared/ndof values over the scan ranges for each of the properties investigated for a 2\textdegree ~collimator located at the bottom of the OD and pointing upwards in the OD barrel. The collimator is most sensitive to changes in reflectivity, and least sensitive to changes in absorption.
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=0.5\linewidth]{images/params_plots_2.00.png}
+    \caption{Change in chi-squared statistic with variation in absorption (orange), Rayleigh scattering (blue) and Tyvek reflectivity (green) up to 30\% from the nominal value.}
+    \label{fig:barrelAllParams}
+\end{figure}
+
+The location of the collimator, in terms of distance from the front face of the PMTs, can affect the sensitivity to changes in the parameters. \cref{fig:refl_comparison_pmtdist.png}  
+
+The collimators have been designed to be tunable to different open angles. A comparison of the results for a 2\textdegree~ and 1.35\textdegree~ collimator in the same position in the barrel is shown in \cref{fig:barrelCompareCollAngles}. With a straight comparison of the Pearson's chi-squared test statistic for the two collimators, there was no obvious change in the sensitivity to changes in any of the parameters.
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\linewidth]{images/params_comparison_plots_1.35_2.00.png}
+    \caption{Change in chi-squared statistic with variation in Rayleigh scattering (left), absorption (centre) and Tyvek reflectivity (right) up to 30\% from the nominal value for a 2\textdegree~ collimator (orange) and 1.35\textdegree~ collimator (blue).}
+    \label{fig:barrelCompareCollAngles}
+\end{figure}
 
 \section{Diffuser Design}\label{sec:diffuser}
 \subsection{ID Diffuser Hemisphere Design}
