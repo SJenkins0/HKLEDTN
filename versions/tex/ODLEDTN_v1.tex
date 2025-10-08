@@ -9,6 +9,7 @@
 \usepackage{url}
 \usepackage{graphicx}
 \usepackage{amsmath}
+\usepackage{tikz}
 \usepackage{siunitx}
 \usepackage[margin=1.1in]{geometry}
 \usepackage[capitalise,noabbrev] {cleveref}
@@ -21,6 +22,7 @@
 \usepackage{subcaption}
 \usepackage{titlesec}
 \usepackage{setspace}
+\usepackage{authblk}
 
 % appendix enumerated with letters
 \usepackage[toc]{appendix}
@@ -33,6 +35,10 @@
 \usepackage{xfrac}
 
 \renewcommand*\thetable{\Roman{table}}
+
+%%spacing on tilde for approximate values
+\let\oldsim\sim 
+\renewcommand{\sim}{{\oldsim}}
 
 \graphicspath{{images/}}
 
@@ -70,7 +76,19 @@
 
 \begin{document}
 \title{Hyper-Kamiokande Outer Detector Light Injector System Technical Note}
-\author{Balint Bogdan\footnote{bbogdan@liverpool.ac.uk}, Sam Jenkins, Steve Boyd, Keith Jewkes, Menai Lamers James,\\Grace Hannaford, Ankush Mitra}
+\author[1]{Balint Bogdan}
+\author[1]{Sam Jenkins\footnote{s.j.jenkins@liverpool.ac.uk}}
+\author[1]{Neil McCauley}
+\author[2]{Liz Kneale}
+\author[2]{Patrick Stowell}
+\author[3]{Steve Boyd}
+\author[3]{Keith Jewkes}
+\author[3]{Menai Lamers James}
+\author[3]{Grace Hannaford}
+\author[3]{Ankush Mitra}
+\affil[1]{University of Liverpool}
+\affil[2]{University of Sheffield}
+\affil[3]{University of Warwick}
 
 \maketitle
 
@@ -80,8 +98,7 @@
 
 \section{Version history}
 \begin{itemize}
-\item v0.99 - First release by Balint circulated to Liverpool group for internal review
-\item v1 - [Sam]: Ported over to github for continued development, as we hit compilation time on overleaf. Initial pass through to fix wording and rewrite some sections. Also integrating Warwick TN on OD diffuser. Will add Liz's saturation studies as soon as these are available. Some reordering of structure to make it flow better.
+\item v1 - First version released to the collaboration.
 \end{itemize}
 
 \newpage
@@ -91,11 +108,57 @@
 
 Hyper-Kamiokande is a large scale water Cherenkov detector with two main sections, an inner detector (ID) and an outer detector (OD). The OD volume of Hyper-K is a one meter wide annular ring on the circumference of the detector. This space is designed to tag charged particles, such as cosmic ray muons or particles from interactions in the surrounding rock, entering the detector. In addition, the OD volume will be used as working space for installation activities. Once complete, it will be optically separated from the ID volume, and will be instrumented with 3,600 outward facing 8~cm photomultipliers tubes (PMTs). These will each surrounded by wavelength shifting (WLS) plates to increase photocoverage.
 
-In order to achieve the precision measurements Hyper-K aims to make, precise calibration of the detector is required. For the OD, a light injection (LI) system will be employed, allowing for known quantities of light to be injected into the detector region. This will consist of 122 diffusers and 12 collimators. The diffuser system, which is described in this technical note, will be used to measure gain and timing properties of the OD PMTs, and will be powered by dedicated pulsed LED sources. The 12 OD collimators are identical to those uses in the ID system, and will be integrated into the ID laser system. Full details on that system, along with investigations of the fibre optics that will be employed for the OD system, can be found in \cite{TN91}.
+In order to achieve the precision measurements Hyper-K aims to make, precise calibration of the detector is required. For the OD, a light injection (LI) system will be employed, allowing for known quantities of light to be injected into the detector region. This will consist of 122 diffusers and 12 collimators. The diffuser system, which is primarily described in this technical note, will be used to measure gain and timing properties of the OD PMTs, and will be powered by dedicated pulsed LED sources. The 12 OD collimators are identical to those used in the ID system, and will be integrated into the ID laser system. Full details on that system, along with investigations of the fibre optics that will be employed for the OD system, can be found in \cite{TN91}, although sensitivity studies to water parameters in the OD region are discussed in \cref{sec:collimator_studies}.
 
-\section{Light Injection System Overview and Requirements}
+\section{Light Injection System Overview and Requirements}\label{sec:overview}
 
-The OD diffuser system will be composed of 122 bare diffusers, installed on the outward facing side of the PMT support structure. The diffuser design is discussed in \cref{sec:diffuser}. These will each be illuminated by individual LED pulser boards, with 365~nm LEDs. This will require at least 122 dedicated LED pulsers, and spares should be readily available for hot-swapping should a board encounter issues. Full details of the pulser board design are given in \cref{sec:LEDpulser}. The pulser boards will be powered and controlled by commercially-available Field Programmable Grid Array (FPGA) boards. The control system architecture for these consists of three primary components:
+The OD diffuser system will be composed of 122 bare diffusers, installed on the outward facing side of the PMT support structure. The proposed layout for this is shown in \cref{fig:ODdiffmap}, though in actuality there will be minor differences from this regular arrangement due to restrictions from other systems.
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}
+\draw[thick] (-4.5, -1.5) rectangle (4.5, 1.5);
+\draw[thick] (0, 3) circle (1.5cm);
+\draw[thick] (0, -3) circle (1.5cm);
+%barrel locations
+\foreach \x in {0,...,11}{
+	\foreach \y in {0,...,6}{
+		\ifodd \y \filldraw[black] (-4.5+\x*2*0.375, -1.125+\y*0.375) circle (2pt);
+		\else \filldraw[black] (-4.5+0.375+\x*2*0.375, -1.125+\y*0.375) circle (2pt);
+		\fi
+		}
+	}
+%topcap
+\foreach \y in {0,...,2}{
+	\foreach \x in {0,...,2}{
+		\filldraw[black] (-0.5+\x*0.5, 1.5+0.5+2*\y*0.5) circle (2pt);
+		}
+	}
+\foreach \y in {0,...,1}{
+	\foreach \x in {0,...,3}{
+		\filldraw[black] (-0.75+\x*0.5, 1.5+2*0.5+2*\y*0.5) circle (2pt);
+		}
+	}
+\foreach \x in {0,...,1}{
+	\filldraw[black] (-1+\x*2, 3) circle (2pt);
+	}
+%bottom cap
+\foreach \y in {0,...,2}{
+	\foreach \x in {0,...,2}{
+		\filldraw[black] (-0.5+\x*0.5, -1.5-0.5-2*\y*0.5) circle (2pt);
+		}
+	}
+\foreach \y in {0,...,1}{
+	\foreach \x in {0,...,3}{
+		\filldraw[black] (-0.75+\x*0.5, -1.5-2*0.5-2*\y*0.5) circle (2pt);
+		}
+	}
+\foreach \x in {0,...,1}{
+	\filldraw[black] (-1+\x*2, -3) circle (2pt);
+	}
+\end{tikzpicture}
+\caption{Injector location map for OD diffuser positions. Locations are approximate and dependent on PMT/WLS plate locations.}\label{fig:ODdiffmap}
+\end{figure}
+These are arranged such that they illuminate roughly an equal number of OD PMTs. One of the primary goals of the system is to inject enough light to saturate the OD PMTs. This goal drives a large part of the photon output optimisation, and Monte Carlo (MC) studies to evaluate the amount of photons required to do this are shown in \cref{sec:saturation}. The diffuser design is discussed in \cref{sec:diffuser}. These will each be illuminated by individual LED pulser boards with 365~nm LEDs. This will require at least 122 dedicated LED pulsers, and spares should be readily available for hot-swapping should a board encounter issues. Full details of the pulser board design are given in \cref{sec:LEDpulser}. The pulser boards will be powered and controlled by commercially-available Field Programmable Grid Array (FPGA) boards. The control system architecture for these consists of three primary components:
 \begin{itemize}
 \item \textbf{Blade}: Interfaces directly with the FPGA, distributing all differential signals into the crate system.
 \item \textbf{Backplane}: Routes differential signals to the pulser boards and provides the primary power distribution, accepting \SI{12}{\volt} and \SI{\pm5}{\volt} inputs.
@@ -105,14 +168,322 @@ Further details on the control system and individual electronics crate component
 
 Light will be transported between the pulsers and diffusers by a series of fibre optic cables; following the investigations in \cite{TN91} the Thorlabs FP400URT \cite{FP400URT} is targeted for this. Due to production limitations, it is not possible to keep all fibre path lengths the same. Instead there will be five different lengths: 50~m, 80~m, 106~m, 124~m and 168~m. The light output after signal attenuation and dispersion in these fibres should be as consistent as possible, which will require fine tuning given the different amounts of attenuation and dispersion which pulses will experience based on fibre length.
 
-The initial design requirements for the system are to produce pulse widths out of the diffuser of between 1--10~ns, with a photon yield in the range 1--15 million photons per pulse (ppp). The 10~ns limit is driven by the timing resolution of the WLS plates. The photon yield target here is more of a goal than a requirement, and saturation studies were performed using numbers motivated by system performance. These are summarised in \cref{sec:saturation}.
+The initial design requirements for the system are to produce pulse widths out of the diffuser of no more than 10~ns, with a photon yield in the range 1--15 million photons per pulse (ppp). The 10~ns limit is driven by the timing resolution of the WLS plates. The wavelength of light used is also partially dictated by the WLS plates, which will not activate for light above 400~nm. The photon yield target here is more of a goal than a requirement, and saturation studies were performed using numbers motivated by system performance. These are summarised in \cref{sec:saturation}.
 
-{\color{red} The below paragraph should split up. The first half has been rewritten into the above paragraph, the second should be fleshed out for the photon yield test section.
 
-Pulse width should ideally be between 1-10~ns and the photon count from 1-15 million photons, but higher limits are preferable. The lower limits are not possible to achieve, as the fibre dispersion will create a minimum pulse width, which is 4.5~ns at 180~metres, and if we try to achieve large light output it will compromise our lower light output, so we can only achieve around 100,000 photons per pulse at minium. While these compromises are not ideal, the fibre selection limits our capabilities on hitting the required theoretical targets.
-}
+\section{OD PMT Saturation Study}\label{sec:saturation}
 
-\section{OD PMT Saturation Studies}\label{sec:saturation}
+The light injection system in the OD will use collimated and diffuse light injection to calibrate the PMTs and to measure the optical properties (scattering and absorption) of water, as well as any degradation in Tyvek reflectivity over the course of operation. 
+
+Diffuse light sources will be used for in-situ calibration of the PMT charge response. Light will be injected at very low levels to measure the single-photoelectron charge response, and the requirement to achieve single-photoelectron coverage across all PMTs was used to determine the number of light injectors required for the light injection calibration system, as reported in the Outer Detector Technical Report~\cite{TN64}. In order to calibrate the PMTs across their entire range, the light injection system must also be capable of illuminating PMTs to saturation, to understand the change in their response as they approach saturation. 
+
+This section describes the use of diffuse light injection to evaluate the suitability of light sources for in-situ measurements of the PMT saturation response. \cref{subsec:LIsim} describes the diffuser simulation, \cref{subsec:params} gives details of the OD geometry and diffuser parameters used, and \cref{subsec:satStudy,subsec:satResults} describe the scope, analysis and results of the saturation study.
+
+\subsection{Diffuser Simulation}\label{subsec:LIsim}
+
+The planned light injection calibration system will include 122 diffusers, as determined by maximising the single-photoelectron coverage of all of the OD PMTs~\cite{TN64}. The division of diffusers between the endcaps and barrels, and their positions in terms of the overall geometry, has been altered since~\cite{TN64}, following an update of the design and geometry in the simulation. ~\cref{fig:diffuserPositions} shows the updated diffuse light injector (LI) locations with respect to OD PMT positions. The diffusers have been positioned as close to equidistant as possible from the surrounding PMTs, next to a strut in an empty cell. 
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.95\linewidth]{diffuser_PMT_positions.png}
+    \caption{Positions of the OD PMTs and diffuser positions used in the calibration simulations. Note that the positions of PMTs in the top and bottom rows of the barrel have changed in the design, and as such the results presented in this tech note reflect these changes. This differs from the most recent version of WCSim (1.12.26)~\cite{WCSim} that has been used as a basis for the simulation, and the changes are reflected in pull request \#525.}
+    \label{fig:diffuserPositions}
+\end{figure}
+
+A new LI generator has been written within the framework of WCSim~\cite{WCSim}. This allows the user to define the characteristics of the LI within a data file input to the simulation. The following characteristics can be defined:
+\begin{itemize}
+    \item Global position within the detector geometry,
+    \item Direction of the LI axis,
+    \item Wavelength of the optical photons
+    \item Pulse width
+    \item Photons per pulse
+    \item LI profile in the form of arrays of $\theta$, $\phi$ and measured light intensity, where $\theta$ is the angle made with the axis of the LI and $\phi$ is the rotation around the axis.
+\end{itemize}
+
+The LI profile opening angle and intensity can reflect either a flat angular distribution of photons within the desired angular range of the light injector (-opening angle, +opening angle), or can be drawn from the measured profile for that injector, in which case the LI generator accurately models the variation across the profile, and in particular the drop-off in the frequency of photons towards the edge of the LI profile. For each pulse, the generator samples the specified number of photons per pulse, each with an energy calculated from the wavelength set in a database currently stored within WCSim, and a time sampled from a Gaussian distribution around the mean, with a variance equal to the pulse width specified in the database. Each photon is also assigned a global direction, which is sampled with a distribution corresponding to the LI profile.
+
+The profile of each diffuser will be measured and stored in the database as a function of the diffuser identifier number in the final simulation. For the purposes of the diffuser simulations presented in this tech note, a single profile taken from the measurement of a diffuser profile in water has been used. This diffuser profile corresponds to an opening angle of around 40\textdegree. Since the OD diffuser profiles have not yet been measured in water, an ID diffuser profile has been used to approximate a realistic OD diffuser profile. Although the design of the OD diffusers has been modified from the ID diffuser design in order to increase the diffuser efficiency, the design has been shown to maintain the desired profile and as such the ID diffuser profile is expected to be a reasonable approximation. The diffuser profile used, and the resulting charge map from a diffuser in the barrel is shown in \cref{fig:diffuserProfileSim}.
+
+\begin{figure}
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+         \centering
+         \includegraphics[width=\linewidth]{Differ_profile.png}
+         \caption{ID diffuser profile measured in water, used for the diffuser simulations described in this technical report. A measured profile for each diffuser will be stored in the database for OD calibration.}
+         \label{fig:diffuserProfile}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}{0.5\textwidth}
+         \centering
+         \includegraphics[width=\linewidth,height=5cm]{diffuse_QCoverage.png}
+         \caption{Charge in photoelectrons on each PMT produced when the profile in (a) is used to simulate optical photons from a diffuser pointing outwards in the barrel OD. The size of the PMT + WLS plates has been increased only in the plot for improved visualisation.}
+         \label{fig:diffuserChargeMap}
+     \end{subfigure}
+     \caption{Diffuser profile measured in water, and the resulting charge map from this profile.}
+     \label{fig:diffuserProfileSim}
+\end{figure}
+
+\subsection{Diffuser and OD Parameters}\label{subsec:params}
+
+The characteristics of diffusers simulated in the saturation study are summarised in \cref{tab:satStudyParams}. The number of photons per pulse used in the simulation was based on measurements made from the LED pulser setup, using a chain of fibre optic cables equating to 181~m in length. The simulations described here use two different values for the number of photons per pulse, corresponding to a maximum photon yield from the fibre optic chain of $11\times10^6$ photons per pulse and $20\times10^6$ photons per pulse. This was modified to account for an assumed diffuser efficiency of 50\%. As such, the simulated numbers of photons per pulse are $5.5\times10^6$ and $10\times10^6$ respectively.
+
+\begin{table}[ht!]
+    \centering
+    \begin{tabular}{|c|c|}
+    \hline
+        Parameter    & Assumed value \\
+        \hline
+       Photons per pulse  &  $11\times10^6$, $20\times10^6$\\
+       Wavelength  & 365 nm \\
+       Pulse width & 10~ns\\
+       Diffuser efficiency & 50\%\\
+       \hline
+    \end{tabular}
+    \caption{The LI configuration used in the diffuser simulations for the saturation study presented in \cref{subsec:satStudy}.}
+    \label{tab:satStudyParams}
+\end{table}
+
+The OD geometry parameters that have been used in the simulations for the saturation study are shown in \cref{tab:od_config}.
+
+\begin{table}[ht!]
+    \centering
+    \begin{tabular}{|c|c|}
+    \hline
+        Parameter    & Assumed value \\
+        \hline
+       PMT radius  &  8~cm\\
+       PMT dark rate & 0.4 kHz \\
+       OD lateral water depth  & 1 m \\
+       OD height water depth & 2 m\\
+       OD dead space & 60 cm \\
+       Tyvek sheet thickness & 1 mm\\
+       WLS plate thickness & 6 mm \\
+       WLS plate length & 30 cm \\
+       \hline
+    \end{tabular}
+    \caption{The OD configuration used for the saturation study presented in \cref{subsec:satStudy} using WCSim version 1.12.26.}
+    \label{tab:od_config}
+\end{table}
+
+
+
+\subsection{Saturation Analysis}\label{subsec:satStudy}
+
+The limit of the PMT range is governed by the electronics response, which is expected to fully saturate at around 100 photoelectrons (pe) in a 16~ns time window. The simulation of the PMT charge response in WCSim does not currently fully handle the saturation, but it is expected that the linearity of the charge response will break down between 80~pe and 100~pe. Saturation measurements aim to measure the PMTs over the full range of this breakdown in linearity. The saturation level for the purposes of this study has been taken to be 100~pe in 16~ns, but the analysis has been designed to take into account the need to measure across the entirety of this range.
+
+The saturation of OD PMTs has been evaluated in the top endcap, barrel and bottom endcap. The diffuser simulations are intensive, requiring millions of tracked photons to simulate a single flash, and the OD parameters are not yet finalised. As such, only two diffusers in each of the top endcap, barrel and bottom endcap have been simulated for this current study.
+
+Two values have been used as figures of merit to determine the PMT saturation coverage:
+\begin{itemize}
+    \item Mean saturation distance - the distance from the nearest diffuser at which the mean charge per PMT is greater than saturation level.
+    \item Saturation limit - the greatest distance from the nearest diffuser at which the charge on any PMT reaches the saturation level.
+\end{itemize}
+
+For each configuration, the charge per PMT was plotted as a function of the distance from the nearest diffuser, to give the saturation limit (\cref{fig:maxSatDistPlot}). The mean saturation distance was then found by taking the mean of the same plot (\cref{fig:meanSatDistPlot}). The plot showing the saturation limit is particularly useful in understanding the range of distances over which it is possible to see the expected range of breakdown of linearity.
+
+\begin{figure}[ht!]
+    \centering
+    \begin{subfigure}{0.49\textwidth}
+         \centering
+         \includegraphics[width=\linewidth, height=5.2cm]{charge_distance_reduced_diffuser_41_365.0_nm_10.0_ns_5500000_ppp_all.png}
+         \caption{Plot of the charge per PMT as a function of the distance from the nearest diffuser. The saturation limit is the greatest distance at which saturation is achieved i.e. 5.0~m in this case.}
+         \label{fig:maxSatDistPlot}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}{0.49\textwidth}
+         \centering
+         \includegraphics[width=\linewidth,height=5cm]{mean_charge_distance_reduced_diffuser_41_365.0_nm_10.0_ns_5500000_ppp_all.png}
+         \caption{Plot of the mean charge per PMT found by taking the mean of the left-hand plot. The mean saturation distance is the greatest distance at which the mean charge per PMT is greater than the saturation level i.e. 4.0~m.}
+         \label{fig:meanSatDistPlot}
+     \end{subfigure}
+     \caption{Sample plots showing the mean saturation distance and saturation limit used as figures of merit for the saturation study. The red, horizontal lines mark the assumed saturation level of 100~pe.}
+     \label{fig:satAnalysisPlots}
+\end{figure}
+
+Since only six diffuser locations have been simulated, the percentage of PMTs within the mean saturation distance and saturation limit is calculated assuming symmetry both of the detector and of the diffuser positions with respect to the PMTs. However, for practical reasons, the diffusers have to be positioned off-centre in the empty cells between PMTs, next to the struts on the PMT support structure. As such, a full simulation of all diffusers should be performed in future, once the OD geometry and LI specifications have been finalised, for an accurate evaluation of the percentage saturation across the whole detector.
+
+\subsection{Results}\label{subsec:satResults}
+
+The mean saturation distance and saturation limit were evaluated for two OD diffuser locations in each of the top endcap, barrel and bottom endcap. The results for $5.5\times10^6$ photons per pulse are shown in \cref{tab:satStudyResults}, along with the percentage of PMTs within the mean saturation distance and saturation limit. \cref{tab:satStudyResults_pevalues} shows the mean charge at the calculated saturation distance and the mean charge at the saturation limit at the six diffuser positions. The results for $10\times10^6$ photons per pulse are shown in \cref{tab:satStudyResults10M} and \cref{tab:satStudyResults10M_pevalues}.
+\begin{table}[ht!]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|}
+    \hline
+        OD location & Mean saturation & \% PMTs within & Saturation  & \% PMTs within \\
+                    &  distance & saturation distance & limit &  saturation limit\\
+        \hline
+        Barrel 1        & 4.0~m & 31\%        & 5.0~m   & 50\% \\
+        Barrel 2        & 4.0~m    & 31\%     & 5.0~m   & 50\% \\
+		Top endcap 1    & 3.7~m  & 27\%       & 3.9~m & 30\% \\
+        Top endcap 2    & 3.6~m  & 24\%       & 4.3~m & 37\% \\ 
+		Bottom endcap 1 & 3.6~m  & 24\%       & 4.3~m & 37\% \\
+		Bottom endcap 2 & 3.5~m  & 22\%       & 6.1~m & 66\% \\
+        \hline
+    \end{tabular}
+    \caption{Results for PMT saturation using the diffuser configuration detailed in \cref{tab:satStudyParams} with $5.5\times10^6$ photons per pulse.}
+    \label{tab:satStudyResults}
+\end{table}
+%
+\begin{table}[ht!]
+    \centering
+    \begin{tabular}{|c|c|c|c|}
+    \hline
+        OD location &Diffuser position & Mean charge (pe)   & Mean charge (pe)    \\
+                    &  (cm)                & at sat. distance & at sat. limit $\pm2\sigma$.  \\
+        \hline
+        Barrel 1       & (395.65,-3281.50,8.75)   & 108  & 68 $\pm$ 12 \\ 
+        Barrel 2       & (3281.50,395.65,1705.55) & 105  & 67 $\pm$ 11 \\ 
+        Top endcap 1   & (-70.7,-97.3,3350.82)    & 106  & 96 $\pm$ 14 \\
+        Top endcap 2   & (-707,-968.2,3350.82)    & 108  & 77 $\pm$ 13 \\
+        Bottom endcap 1 & (-707,-968.2,-3350.82)  & 108  & 77 $\pm$ 14 \\ 
+        Bottom endcap 2 & (707,-1157.8,-3350.82)  & 114  & 42 $\pm$ 11 \\ 
+        \hline
+    \end{tabular}
+    \caption{PMT saturation levels for the figures of merit detailed in \cref{tab:satStudyResults} with $5.5\times10^6$ photons per pulse.}
+    \label{tab:satStudyResults_pevalues}
+\end{table}
+
+\begin{table}[ht!]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|}
+    \hline
+        OD location & Mean saturation & \% PMTs within & Saturation  & \% PMTs within \\
+                    &  distance & saturation distance & limit &  saturation limit\\
+        \hline
+        Barrel 1        & 5.4~m  & 57\%       & 6.9~m   & 86\% \\
+        Barrel 2        & 5.4~m  & 57\%       & 6.9~m   & 86\% \\
+		Top endcap 1    & 5.3~m  & 48\%       & 6.3~m & 69\% \\
+        Top endcap 2    & 4.3~m  & 37\%       & 6.7~m & 74\% \\ 
+		Bottom endcap 1 & 4.3~m  & 37\%       & 6.4~m & 70\% \\
+		Bottom endcap 2 & 4.3~m  & 37\%       & 6.5~m & 72\% \\
+        \hline
+    \end{tabular}
+    \caption{Results for PMT saturation using the diffuser configuration detailed in \cref{tab:satStudyParams} with $10\times10^6$ photons per pulse.}
+    \label{tab:satStudyResults10M}
+\end{table}
+%
+\begin{table}[ht!]
+    \centering
+    \begin{tabular}{|c|c|c|c|}
+    \hline
+        OD location &Diffuser position & Mean charge (pe)   & Mean charge (pe)    \\
+                    &  (cm)                & at sat. distance & at sat. limit $\pm2\sigma$.  \\
+        \hline
+        Barrel 1       & (395.65,-3281.50,8.75)   & 102  & 70 $\pm$ 12 \\ 
+        Barrel 2       & (3281.50,395.65,1705.55) & 104  & 69 $\pm$ 12 \\ 
+        Top endcap 1   & (-70.7,-97.3,3350.82)    & 102  & 72 $\pm$ 15 \\
+        Top endcap 2   & (-707,-968.2,3350.82)    & 139  & 65 $\pm$ 13 \\
+        Bottom endcap 1 & (-707,-968.2,-3350.82)  & 142  & 70 $\pm$ 12 \\ 
+        Bottom endcap 2 & (707,-1157.8,-3350.82)  & 141  & 69 $\pm$ 11 \\ 
+        \hline
+    \end{tabular}
+    \caption{PMT saturation levels for the figures of merit detailed in \cref{tab:satStudyResults} with $10\times10^6$ photons per pulse.}
+    \label{tab:satStudyResults10M_pevalues}
+\end{table}
+
+\cref{fig:pmtmap_with_limits} shows the PMT charge map for the barrel 1 diffuser illuminated by $10\times10^6$ photons per pulse, with the saturation distance and saturation limits marked around the barrel PMTs.
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=0.7\linewidth]{diffuse_QCoverage_with_limits.png}
+         \caption{Charge in pe on each PMT as a result of illumination with the barrel 1 diffuser illuminated by $10\times10^6$ photons per pulse. The mean saturation distance and saturation limit around each PMT in the barrel are marked in red (smaller circles) and blue (larger circles) respectively.}
+         \label{fig:pmtmap_with_limits}
+\end{figure}
+
+Due to the differing geometry the mean saturation distance in the barrel (5.4~m for $10\times10^6$ photons per pulse) is slightly higher than in the endcaps (4.3-5.5~m), and the percentage of PMTs within the mean saturation distance in the barrel is higher at 57\% than in the endcaps (37-48\%). Similarly, the percentage of PMTs within the saturation limit in the barrel is higher than in the endcaps (with the exception of the bottom endcap 2 diffuser with $5.5\times10^6$ photons per pulse) with 86\% of barrel PMTs within the saturation limit of 6.9~m. It should be noted that changes to the OD geometry, including the addition of further PMTs in the endcaps, are possible, and have not been taken into account in this simulation. Further, 100\% saturation of the OD PMTs is not possible with any realistic setup, due to the large amount of required fibre and therefore attenuation, along with the geometry of the detector. Coverage obtained from this system is significantly larger than for the OD system in Super-K, which was desired to improve calibration effectiveness.
+
+The diffuser position with respect to the surrounding PMTs has an observable effect on the saturation levels achieved. Where the diffuser positions with respect to surrounding PMTs are equivalent, as in the case of the two barrel diffusers, as well as the bottom endcap 1 and top endcap 2 diffusers, saturation levels are largely the same for both light intensities. However, the positions of the top endcap 1 and bottom endcap 2 diffuser each differ from all other diffusers simulated, resulting in different saturation distances and saturation limits. Again, a full simulation of all diffuser positions should be carried out to fully evaluate achievable saturation across the whole detector, once all parameters and geometries have been finalised.
+
+\section{OD Collimator Studies}\label{sec:collimator_studies}
+
+Collimated light sources will be used to make measurements of scattering and absorption in water, and Tyvek reflectivity. These will be used to calibrate for changes in the detector properties over time. This will require untangling the effect of each of the properties in order to discriminate changes in each of the properties. The first step is to evaluate the sensitivity of collimators to changes in each of the properties separately. 
+
+This section presents the collimator sensitivity studies which were carried out in 2023, prior to updates to the OD geometry and more recent updates to the light-injector simulation. \cref{subsec:collSim} describes the positioning of collimators, and the simulation method. The analysis of sensitivity to water properties and Tyvek reflectivity are presented in \cref{subsec:collAnalysis}, and the results are presented in \cref{subsec:collResults}.
+
+\subsection{Collimator Simulation}\label{subsec:collSim}
+
+The collimated light sources were simulated using the LI simulation described in \cref{subsec:LIsim}. For this collimator study, a flat profile with an opening angle of 2\textdegree~was taken as the baseline, and the OD configuration described in \cref{tab:od_config} in \cref{subsec:params} was used. \cref{fig:collMap} shows the charge map produced by the 2\textdegree~collimator source in the top endcap.
+
+ \begin{figure}[ht!]
+     \centering
+     \includegraphics[width=0.5\linewidth]{hitmapColl.png}
+     \caption{Distribution of charge collected in end cap PMTs for a collimated
+beam of light injected from the right hand side, travelling across the diameter of the OD to the left hand side.}
+     \label{fig:collMap}
+ \end{figure}
+
+The sensitivity of each of the collimators to changes in absorption, Rayleigh scattering and Tyvek reflectivity was evaluated by varying each property one at a time, scanning over values up to 30\% either side of the nominal value for absorption and scattering, and 30\% lower than than the expected value for Tyvek reflectivity. Nominal values have been extrapolated from Super-Kamiokande measured values in the case of scattering and absorption, and from the expected value in the case of the Tyvek reflectivity. These values and the range of the scans over each property are shown in \cref{fig:collimatorScans}.
+
+\begin{figure}[ht!]
+    \centering
+    \begin{subfigure}{0.32\textwidth}
+         \centering
+         \includegraphics[width=\linewidth]{AbsorptionLength.png}
+         \caption{Absorption length}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}{0.32\textwidth}
+         \centering
+         \includegraphics[width=\linewidth]{RayleighScatteringLength.png}
+         \caption{Rayleigh scattering}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}{0.32\textwidth}
+         \centering
+         \includegraphics[width=\linewidth]{TyvekReflectivity.png}
+         \caption{Tyvek reflectivity}
+     \end{subfigure}
+     \caption{Nominal (black, solid), maximum (blue, dashed) and minimum (red, dot-dashed) values for the scans over absorption length and Rayleigh scattering, and nominal (black, solid) and minimum (red, dot-dashed) values for the scans over Tyvek reflectivity.}
+     \label{fig:collimatorScans}
+\end{figure}
+
+Variable steps were chosen for the scan over the range for each property to allow sufficiently detailed evaluation of the sensitivity to changes in each property. For absorption and scattering, the parameters are varied in steps of 1\% between $\pm$5\%, where finer binning is required to see the small effects at these variations. From 5\% to 30\% either side of the nominal, the parameters were varied in 5\% steps. For Tyvek reflectivity, the parameter is reduced by up to 30\% either side of the nominal, in 0.5\% steps up to $\pm$5\%, 1\% steps between $\pm$5\% and $\pm$10\% and in 5\% steps above that. 
+
+The scans over the variation in parameters require at least 21 individual simulations per property, and each simulation requires $\mathcal{O}$(100M) photons to produce sufficient statistics. In addition, the OD geometry remains in flux. As such, although the OD light injection system will include 12 OD collimators, a single collimator in each of the OD top endcap, barrel and bottom endcap was simulated for the purposes of these studies.
+
+
+\subsection{Collimator Sensitivity Analysis}\label{subsec:collAnalysis}
+
+To evaluate the sensitivty of the collimator to each of the parameters, the distribution of charged collected in the PMTs as a function of the distance from the light injector was compared over the scan ranges detailed in \cref{subsec:collSim}. These were compared using a Pearson's $\chi^2$ test:
+\begin{equation}
+	\chi ^2 = \sum^S_{s=0}\frac{(O_s-E_s)^2}{E_s},
+\end{equation}
+where the expected value $E_s$ is the charge on the PMTs at distance $s$ for the nominal parameter value, and the observed value $O_s$ is the charge on the PMTs at distance $s$ for the  varied parameter value. In this way, the distribution of $\chi^2$ values as a function of the percentage change in parameter value indicates the sensitivity of the collimator to the changes in each of the properties. For this analyis, only PMTs located in the same part of the detector as the collimator were included in the $\chi^2$ calculation.
+
+Errors on the $\chi^2$ statistic were calculated by splitting the sample into 10 sub-samples, calculating the Pearson’s $\chi^2$ test statistic for each sub-sample and then calculating a relative standard deviation from the variance between the sub-samples.
+
+%In an attempt to begin to disentangle the affects of variations of the different parameters...
+
+\subsection{Results}\label{subsec:collResults}
+
+\cref{fig:barrelAllParams} shows the $\chi^2$/ndof values over the scan ranges for each of the properties investigated for a 2\textdegree~collimator located at the bottom of the OD and pointing upwards in the OD barrel. The collimator is most sensitive to changes in reflectivity, and least sensitive to changes in absorption. The results for the barrel collimator shown in \cref{fig:barrelAllParams} indicate that for this collimator configuration, sensitivity at the 99\% confidence level can be achieved for changes in reflectivity at the sub-percent level, a reduction in the absorption length of 20\% can be detected at the 95\% confidence level and a change in the scattering length can be detected at the 99\% confidence level within a few per cent of the nominal value.
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=0.5\linewidth]{params_plots_2.00.png}
+    \caption{Change in $\chi^2$ statistic with variation in absorption (orange), Rayleigh scattering (blue) and Tyvek reflectivity (green) up to 30\% from the nominal value.}
+    \label{fig:barrelAllParams}
+\end{figure}
+
+For the baseline analysis, the collimator has been positioned close to the front face of the PMTs. However, the location of the collimator, in terms of distance from the front face of the PMTs, can affect the sensitivity to changes in the parameters, particularly in the case of reflectivity, as shown in \cref{fig:refl_comparison_pmtdist.png}. Ultimately the positioning of the collimator will be constrained by practical considerations and, as such, the sensitivity of the collimators to absorption, scattering and Tyvek reflectivity should be reassessed once the OD geometry and collimator positioning have been finalised.
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=0.5\linewidth]{collimator_compare_positions_refl.png}
+    \caption{Change in $\chi^2$ statistic with variation in Tyvek reflectivity up to 30\% from the nominal value for a collimator positioned close to the PMTs (red), halfway between the PMTs and tank wall (blue), and close to the tank wall (black).}
+    \label{fig:refl_comparison_pmtdist.png}
+\end{figure}
+
+The collimators have been designed to be tunable to different open angles. A comparison of the results for a 2\textdegree~and 1.35\textdegree~collimator in the same position in the barrel is shown in \cref{fig:barrelCompareCollAngles}. With a straight comparison of the Pearson's $\chi^2$ test statistic for the two collimators, there was no obvious change in the sensitivity to changes in any of the parameters. However, a more detailed analysis which takes into account additional information, such as the timing of the PMT hits as a function of PMT location, should be performed to re-evaluate the effect of the opening angle on collimator sensitivity to each of the properties investigated.
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{params_comparison_plots_1.35_2.00.png}
+    \caption{Change in $\chi^2$ statistic with variation in Rayleigh scattering (left), absorption (centre) and Tyvek reflectivity (right) up to 30\% from the nominal value for a 2\textdegree~ collimator (orange) and 1.35\textdegree~collimator (blue).}
+    \label{fig:barrelCompareCollAngles}
+\end{figure}
+
+These results represent a preliminary evaluation of the sensitivity of the OD collimator system to the three properties investigated, and presents the first step in the development of an analysis to measure these properties using the collimator system. This will rely on discriminating the effect of changes in each property simultaneously and will require a more complex analysis. This analysis should be performed once the OD geometry has been finalised.
 
 \section{Diffuser Design}\label{sec:diffuser}
 \subsection{ID Diffuser Hemisphere Design}
@@ -207,7 +578,7 @@ Bare fibre re-insertion & 1.8 \\
 
 \subsection{OD Diffuser Design}
 
-The original intention was to use the same diffuser hemisphere design for the OD diffusers as will be used for the ID diffusers.  However, the standard diffuser emits less than 20\% of the power delivered by an optical fibre. As there are a number of interfaces in the optical pathway between the light source and the diffuser, and as the light source for the OD will be LEDs, this was considered too low to be able to effectively illuminate the OD space. Neither the number of interfaces in the optical chain, nor the light source can be changed easily, but it is possible that an alternate design of the diffuser hemisphere could yield more light.
+The original intention was to use the same diffuser hemisphere design for the OD diffusers as will be used for the ID diffusers.  However, the standard diffuser emits less than 20\% of the power delivered by an optical fibre. As there are a number of interfaces in the optical pathway between the light source and the diffuser, and as the light source for the OD will be LEDs, this was considered too low to be able to effectively saturate PMTs in the OD space, which is one of the primary design requirements of the system. Neither the number of interfaces in the optical chain, nor the light source can be changed easily, but it is possible that an alternate design of the diffuser hemisphere could yield more light.
 
 \begin{figure}
     \centering    
@@ -276,17 +647,23 @@ The OD space will be illuminated by a total of 122 OD diffusers, 19 on each of t
 \label{fig:od_diffuser_mount_pics}
 \end{figure*}
 
-Drawings for the OD diffuser prototype mount can be seen in \cref{fig:od_diffuser_mount} and pictures of the prototype can be seen in \cref{fig:od_diffuser_mount_pics}. The mount is made from stainless steel and is designed to hook over a horizontal frame bar, and screw in from the bottom. The PTFE mount is approximately 5 cm on a side. The fibre will be installed from the back and is held in place by a T-shaped component that is screwed down by the gondola worker.
+Drawings for the OD diffuser prototype mount can be seen in \cref{fig:od_diffuser_mount} and pictures of the prototype can be seen in \cref{fig:od_diffuser_mount_pics}. The mount is made from stainless steel and is designed to hook over a horizontal frame bar, and screw in from the bottom. The PTFE mount is approximately 5 cm on a side. The fibre will be installed from the back and is held in place by a T-shaped component that is screwed down by the gondola worker. An image of the prototype housing installed on the PMT support structure mockup next to a mechanical OD PMT and WLS plate is given in \cref{fig:ODPMTRAL}.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.8\textwidth]{OD PMT and LI mount.png}
+\caption{OD diffuser housing installed at the RAL mockup frame, next to an OD PMT and WLS plate.}\label{fig:ODPMTRAL}
+\end{figure}
 
 
 \section{Pulser Board}\label{sec:LEDpulser}
 
 \subsection{Pulser Board Overview}
 
-The pulser board was designed to be a more efficient and compact version compared to Super-Kamiokande UK Light Injection system, improving on efficiency, functionality, and light output. The pulser board is a rather simple board designed for low cost production. This section explains each circuit, component selection and design decision. As of writing, the board development is v0.9. v1.0 will be ready by September and will have only minor changes and adjustments compared to v0.9, mostly centered on refinement and removing the prototyping circuit. 
+The pulser board was designed to be a more efficient and compact version compared to Super-Kamiokande UK Light Injection system, improving on efficiency, functionality, and light output. The pulser board is a rather simple board designed for low cost production. This section explains each circuit, component selection and design decision. Minor changes are expected from the current design, mostly centred on removing prototyping circuitry. More details on the expected changes are given in \cref{ImGoingThroughChanges}.
 
 
-\subsection{Physical dimensions and construction}
+\subsection{Physical Dimensions and Construction}
 
 The dimensions of the Printed Circuit Board (PCB) were selected to be as compact as practicable, while still providing sufficient area for the secure mounting of a fibre coupler and for the components. The final board size is 50~mm~$\times$~30~mm. This configuration permits electrically noisy components, such as switching power supplies and the Low Voltage Differential Signal to Transistor Transistor Logic (LVDS-to-TTL) converter to be positioned at a maximum distance from the switching circuitry, thereby minimising potential electromagnetic interference.
 
@@ -362,12 +739,15 @@ The previous iteration of the pulser board utilised a BFR92 \cite{BFR92} high-sp
 
 The fastest commercially available gate driver identified was the Texas Instruments LMG1020 \cite{LMG1020}. This device supports pulse widths down to 1~ns, with typical rise and fall times of 400~ps. Additionally, it features an enable pin that allows for precise nanosecond pulse shaping \footnote{See page 12 and 13 in \cite{LMG1020}.}. The LMG1020 is compatible with both Gallium Nitride Field Effect Transistor (GaN) and Metal Oxide Semiconductor Field Effect Transistor (MOSFET) switches, broadening the scope for future component integration and experimentation. It is widely available and priced at £1.97 per unit in the quantities we will require for full production.
 
-For the switching element, enhancement-mode GaN transistors manufactured by EPC were selected due to their superior switching characteristics. This recommendation originated from Nick Braam, an engineer at the University of Victoria, who contributed to the pulser board design for the mPMT system. Two EPC devices were shortlisted: the EPC2012 \cite{EPC2012} and EPC8004 \cite{EPC8004}. The EPC2012 offers a simpler footprint, which could reduce manufacturing defects. However, the EPC8004 features lower parasitic capacitance, see \cref{fig:EPC2012Cap} for the EPC2012 values and \cref{fig:EPC8004Cap} for EPC8004 values, leading to better high-speed performance.
+For the switching element, enhancement-mode GaN transistors manufactured by EPC were selected due to their superior switching characteristics. This recommendation originated from Nick Braam, an engineer at the University of Victoria, who contributed to the pulser board design for the mPMT system \cite{TN52}. Two EPC devices were shortlisted: the EPC2012 \cite{EPC2012} and EPC8004 \cite{EPC8004}. The EPC2012 offers a simpler footprint, which could reduce manufacturing defects. However, the EPC8004 features lower parasitic capacitance, see \cref{fig:EPC2012Cap} for the EPC2012 values and \cref{fig:EPC8004Cap} for EPC8004 values, leading to better high-speed performance.
 
 To evaluate optical output performance, a 40~m length of FP400URT \cite{FP400URT} optical fibre, a Mouser-sourced 385~nm LED (ATS2012UV385 \cite{ATS2012UV385}), and a Hamamatsu H10721-210 \cite{H10721-210} PMT were used. The EPC-based configurations exhibited nearly identical pulse shapes, whereas the BFR92-based circuit's pulse shape was less sharp at identical pulse widths, as shown in \cref{fig:BFR92PulseShape}. Consequently, the EPC8004 (\cref{fig:EPC8004PulseShape}) was chosen for implementation. Optimal performance of the EPC GaN switches required careful layout considerations. A layout was developed in accordance with EPC's design guidelines \cite{EPCHSGuide}, targeting minimal parasitic inductance and capacitance. The design employs two layers placed directly above one another, utilising large copper planes and multiple vias to ensure uniform current distribution. The PCB will be fabricated and assembled by PCB Train, using their 0.8~mm thick, four-layer stack-up, which offers minimal inter-layer separation for optimal electrical performance (\cref{fig:PCBTrain0.84layer}). This same layout strategy was applied to the BFR92 circuit to provide a fair performance comparison.
 
 A significant challenge at low pulse widths is the presence of a trailing edge or “tail” in the LED output. This effect arises due to charge accumulation and the intrinsic capacitance of the LED, resulting in extended decay times and pulse broadening (see \cref{fig:NoRLPulse}). To mitigate this, a parallel modified snubber circuit was implemented, consisting of a 6.8~nH inductor and a 3.3~$\Omega$ current-limiting resistor. Upon LED turn-off, the inductor generates an electromotive force (EMF) that actively extracts residual charge from the LED, accelerating its shutdown. The effectiveness of this approach is illustrated in \cref{fig:RLPulse}.
 Additionally, two 0508 reverse-topology 100~nF capacitors have been incorporated. Their role is to act as local energy reservoirs, providing rapid current delivery to the LED during pulse operation, surpassing the response time of the main power supply.
+
+
+
 
 \begin{figure}[htbp]
 \centering
@@ -412,8 +792,31 @@ For testing purposes, the previous-generation United Kingdom Light Injection (UK
 
 Following comparative performance evaluations, the configuration using the EPC8004 switch was selected for continued use. While both the EPC8004 and EPC2012 switches exhibited similar electrical characteristics, the EPC8004 offered superior performance due to its lower parasitic capacitance, without any additional cost.
 The pulser board assembly was housed within a dark box during testing, and a 3D-printed fibre coupler was employed to facilitate light delivery. The initial focus of the evaluation was on the shape of the generated optical pulse.
-During component selection, it was observed that the LED previously sourced from Mouser (ATS2012UV385 by Kingbright) provided acceptable performance in terms of electrical characteristics, but the optical output was suboptimal. Additionally, this LED was found to be out of stock and obsolete at the time after testing, precluding further procurement. Subsequently, four ultraviolet LEDs from LC LED were assessed—two emitting at 365~nm and two at 395~nm—each in both 0805 and 0603 surface-mount packages. Results demonstrated that the 0805 package LEDs provided significantly better optical coupling efficiency with the FP400URT optical fibre. Furthermore, the 365~nm variant exhibited superior optical power output relative to the 395~nm counterparts.
-Based on these findings, the LC LED UT-67UV365P~\cite{ut-67uv365p} 365~nm LED was selected as the most suitable LED for this application.
+During component selection, it was observed that the LED previously sourced from Mouser (ATS2012UV385 by Kingbright) provided acceptable performance in terms of electrical characteristics, but the optical output was suboptimal, as it was showing a strange ``double pulsing'', which can be seen in \cref{fig:doublepulse}. Additionally, this LED was found to be out of stock and obsolete at the time after testing, precluding further procurement. 
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{doublepulse}
+\caption{Double pulse observed from the Kingbright ATS2012UV385 LED.}\label{fig:doublepulse}
+\end{figure}
+
+Subsequently, four ultraviolet LEDs from LC LED were assessed—two emitting at 365~nm and two at 395~nm—each in both 0805 and 0603 surface-mount packages. Results demonstrated that the 0805 package LEDs provided significantly better optical coupling efficiency with the FP400URT optical fibre. Furthermore, the 365~nm variant exhibited superior optical power output relative to the 395~nm counterparts.
+Based on these findings, the LC LED UT-67UV365P~\cite{ut-67uv365p} 365~nm LED was selected as the most suitable LED for this application. Tests showed the LED was behaved well, providing an optical pulse of 2.8~ns width, with 3.3~ns eletrical signal, as shown as \cref{fig:1LargePulse}. The pulse width deviation is 60.218~ps, or 2.12\% , and the histogram shows the pulse distribution.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{1LargePulse}
+\caption{Scope trace and pulse width histogram for a 3.3~ns input signal, through a 1~m FP400URT fibre.}\label{fig:1LargePulse}
+\end{figure}
+
+A long-term stress test was also performed for this LED. The pulser system was placed in a small dark box, and a new 365~nm LED was soldered onto the pulser board. The pulse frequency was set to 30~kHz, and the pulse width was set to 2.8~ns, which yielded a 6.8~ns pulse after dispersion through 180~m of fibre. The system was running continuously for 13 days, during which power and air temperature measurements were made every 10 seconds. The air temperature was measured at the power meter, using the Thorlabs PM100USB. Each individual LED is expected to run at around 0.0082~Hz, as the auto-calib process is expected to pulse any channel at 1~Hz rate and there are 122 active channels. This means that pulsing the LED at 30~kHz for 13 days is equivalent to 106,849 years of normal running, not including the short dedicated calibration runs where the system will run at 1~kHz. While results are not calibrated for temperature change, it can be seen that most changes in power correlate with temperature fluctuations. By comparing power results for the same ambient temperature at the beginning and end of the experiment, a 1.5\% loss in power is observed.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{PowerAndTempVsTime.png}
+    \caption{LED power and ambient temperature as a function of time for the long term tests.}
+    \label{fig:powertempvstime}
+\end{figure}
 
 
 
@@ -423,7 +826,7 @@ The DS90C402 \cite{DS90C402} from Texas Instruments was selected as the LVDS-to-
 
 The associated circuit was implemented in accordance with the manufacturer's recommendations provided in the datasheet. A decoupling capacitor was placed in close proximity to the power supply pin to minimise voltage ripple. Output traces were routed using polygon fills to reduce impedance and enhance signal integrity, and a continuous ground plane was placed beneath the signal layers to improve shielding and minimise electromagnetic interference. The schematic for this is given in \cref{fig:lvdsttl}.
 
-\begin{figure}[htbp]
+\begin{figure}[h!]
 \centering
 \includegraphics[scale=0.8]{LVDS-TTL Converter.png}
 \caption{LVDS-TTL Converter Schematic\label{fig:lvdsttl}}
@@ -434,9 +837,9 @@ The associated circuit was implemented in accordance with the manufacturer's rec
 
 Each pulser board is required to incorporate a variable voltage power supply dedicated to driving the LED, with an adjustable output range from 3~V to 12~V. This supply is used exclusively to modulate the LED’s light output by varying the forward voltage, and consequently the current. The design specification also necessitates that the power supply be remotely controllable—i.e., capable of being switched on or off via a simple logic-level signal.
 
-For this purpose, the LT1963A \cite{LT1963} adjustable low-dropout linear regulator was selected. This regulator has demonstrated reliable performance in previous pulser board iterations and offers a favourable balance of cost-effectiveness and controllability. The implementation includes standard filtering and decoupling, with layout details provided in \cref{fig:LT1963Layout}. The schematic provided in \cref{fig:12VVariablePSU} is an early version used for prototyping; the adjustable circuit has been simulated and will be tested shortly, and the enable circuit has been tested, modified and simplified. Updated schematics will be provided with v1.0 circuit.
+For this purpose, the LT1963A \cite{LT1963} adjustable low-dropout linear regulator was selected. This regulator has demonstrated reliable performance in previous pulser board iterations and offers a favourable balance of cost-effectiveness and controllability. The implementation includes standard filtering and decoupling, with layout details provided in \cref{fig:LT1963Layout}. The schematic provided in \cref{fig:12VVariablePSU} is an early version used for prototyping; the adjustable circuit has been simulated and will be tested shortly, and the enable circuit has been tested, modified and simplified. Updated schematics will be provided with v1.0 circuit. There will be overcurrent protection built in to the system as well. A ZXCT1051 (Reference!) is used to monitor the current and if it senses larger than normal current then it send a signal to the FPGA to turn the damaged board off. A surface mounted fuse will be added in line as well to make sure there is a second line of defense as well.
 
-\begin{figure}[htbp]
+\begin{figure}[h!]
 \centering
 \includegraphics[scale=0.5]{LT1963layout.png}
 \caption{LT1963 Layout\label{fig:LT1963Layout}}
@@ -444,13 +847,13 @@ For this purpose, the LT1963A \cite{LT1963} adjustable low-dropout linear regula
 
 \begin{figure}[h]
 \centering
-\includegraphics[scale=0.5]{12VVariablePSU.png}
+\includegraphics[scale=0.7]{12VVariablePSU.png}
 \caption{12V Circuit Schematics\label{fig:12VVariablePSU}}
 \end{figure}
 
 In addition to the variable LED supply, each board requires a stable 5~V supply to power both the DS90C402 LVDS-to-TTL converter and the LMG1020 gate driver. Unlike the LED supply, this rail remains continuously powered. The 5~V supply is provided by an LM2937-5 \cite{LM2347-5}, a fixed-output linear voltage regulator, which has been successfully employed in various high-speed and low-noise applications within the laboratory. The associated circuit schematic and layout and schematic are shown in \cref{fig:LM29375Layout,fig:5VCircuit} respectively.
 
-\begin{figure}[htbp]
+\begin{figure}[h!]
 \centering
 \includegraphics[scale=0.5]{LM29375Layout.png}
 \caption{LM2937-5 Layout\label{fig:LM29375Layout}}
@@ -462,9 +865,9 @@ To meet system-level design constraints, each pulser board is equipped with its 
 Power is supplied to each board via the Eurocard backplane. The 12~V input from the Eurocard simultaneously feeds both the variable (LED) and fixed (logic) power regulators on the pulser board. The LED enable function is controlled via a 5~V logic signal originating from the Eurocard’s GPIO interface. Additionally, a DAC output from the Eurocard provides a voltage control signal to the adjustment pin of the LT1963A regulator on each pulser board, thereby allowing precise, programmable control of light intensity.
 
 
-\begin{figure}[htbp]
+\begin{figure}[h!]
 \centering
-\includegraphics[scale=0.7]{5VCircuit.png}
+\includegraphics[width=0.7\textwidth]{5VCircuit.png}
 \caption{5V circuit schematics\label{fig:5VCircuit}}
 \end{figure}
 
@@ -474,7 +877,7 @@ The previous board connector was deemed too bulky and expensive for the larger n
 
 An illustration showing the connector and corresponding circuit layout is provided in \cref{fig:Connector}.
 
-\begin{figure}[htbp]
+\begin{figure}[h!]
 \centering
 \includegraphics[scale=0.5]{Connector.png}
 \caption{Connector Schematics\label{fig:Connector}}
@@ -485,22 +888,35 @@ An illustration showing the connector and corresponding circuit layout is provid
 
 During the prototyping phase, improvements were made to the PCB layout to better accommodate a fibre coupler. As a result, the current design includes provisions for precise mechanical mounting and alignment. Specifically, two mounting holes for M2 screws have been incorporated, enabling the 3D-printed coupler to be firmly secured to the board (see Figure~\ref{fig:OldFibreCouplerDesign}). In addition, two dowel holes have been added to guide the coupler into position, ensuring accurate alignment over the LED. Given the tolerances associated with PCB fabrication and 3D printing, an alignment accuracy of approximately \SI{100}{\micro\metre} is expected.
 
-\begin{figure}[htbp]
+\begin{figure}[h!]
 \centering
-\includegraphics[scale=0.5]{OldFibreCouplerDesign.png}
-\caption{Old Fibre Coupler Design\label{fig:OldFibreCouplerDesign}}
+\begin{subfigure}{0.5\textwidth}
+\centering
+    \includegraphics[width=0.8\textwidth]{OldFibreCouplerDesign.png}
+    \subcaption{}\label{fig:oldFibreCoupler}
+\end{subfigure}%
+\begin{subfigure}{0.5\textwidth}
+\centering
+    \includegraphics[width=0.8\textwidth]{Screenshot 2025-10-07 170014.png}
+        \subcaption{}\label{fig:oldFibreCouplerHalf}
+\end{subfigure}
+\caption{Fibre coupler design, showing (a) the coupler from the outside and (b) a cross-section. The coupler sits directly over the top of the surface-mounted LED.\label{fig:OldFibreCouplerDesign}}
 \end{figure}
 
 To optimise the electrical path, capacitors have been repositioned as close as possible to the LEDs. This minimises parasitic inductance and resistance, while enabling a centralised layout of larger components. The resulting configuration creates a compact chamber housing both the LEDs and associated capacitors.
 
-An earlier design for the fibre coupler, which assumed uniform fibre lengths for all channels, has since been abandoned. The current approach for the LED light injection system adopts five different fibre lengths, necessitating individual light attenuation for each channel. This attenuation will be implemented within the coupler itself, allowing the LED output to remain within the electronically controlled dynamic range.
-
-The proposed design is modular, consisting of three components: a base section mounted to the pulser PCB, a top section into which the fibres will be epoxied, and an intermediate attenuator element. The latter will serve to space the fibre from the LED and thereby adjust the optical coupling efficiency to achieve the required attenuation. While an initial prototype will be developed in the near term for functional testing, the full design and validation of the fibre coupler will be undertaken later, once the required fibre lengths are fixed and unlikely to change. Should the project timeline require faster iteration, this can be pursued.
+The design for the fibre coupler is modular, consisting of three components: a base section mounted to the pulser PCB, a top section into which the fibres will be epoxied, and an intermediate attenuator element. The latter part will be added to the current design to space the fibre from the LED and thereby adjust the optical coupling efficiency to achieve required attenuation, accounting for the different lengths of fibre in the system. This means the attenuation will be implemented within the coupler itself, allowing the LED output to remain within the electronically controlled dynamic range.
 
 The fibre coupler will be fabricated via stereolithography (SLA) using a black resin to minimise light transmission through the material. Additional light-tight testing will be conducted, and black paint may be applied if further sealing is required. Furthermore, laser-cut rubber gaskets will be introduced at interface points to ensure optimal optical isolation and mechanical sealing.
 
 \subsection{Photon Yield Tests}
-{\color{red} tests on maximising photon yield and available dynamic range should be fully described here}
+
+As discussed in \cref{sec:overview}, one of the primary requirements of the OD diffuser system is to saturate as many of the OD PMTs as possible. To that end, an important test of the LED pulser electronics and candidate LEDs was determining the maximum photon output.
+
+To provide a realistic amount of attenuation and dispersion, several FP400URT fibres were connected in series using Thorlabs ADAFC1 FC-FC mating sleeves. Combining a 1~m patch fibre with a 35~m, 40~m and 105~m reel equated to a total of 181~m with three mating sleeves, $\sim10$~m greater than the expected maximum fibre distance in reality. One end of the chain of fibres was connected to the LED board via a prototype fibre coupler, which holds the fibre end directly against the LED. To improve collection efficiency, the cavity was filled with Thorlabs G608N3 index matching gel. The other end of the fibre chain was connected to either a Hamamatsu H10721-210 PMT or a Thorlabs PM100USB with a S150C sensor, for timing or power measurements respectively.
+
+The LED board was set at 12~V, the current highest voltage output. The fibre was first connected to the PMT, to confirm that the pulse width was sub-10~ns. The power was then measured by the power meter. From this test, the maximum recorded light yield was found to be $2.4\times10^7$ photons per pulse. Further data was taken to investigate the dynamic range associated with changing pulse width and voltage, however in migrating lab PCs this has been lost, and will be retaken with the most recent versions of the hardware. Despite this, these numbers show that the system is capable of producing a large number of photons per pulse (ppp). In \cref{sec:collimator_studies} an output of $2\times10^7$ ppp was shown to yield up to 86\% saturation in the barrel region.
+
 
 \subsection{Production}
 
@@ -513,17 +929,17 @@ Production will be carried out using PCB Train as they are local and competitive
 \end{figure}
 
 
-\subsection{Changes Expected from v0.9 to v1.0}
+\subsection{Changes Expected from v0.9 to v1.0}\label{ImGoingThroughChanges}
 
 \subsubsection{LED and Switching Circuit}
 
 There will be minimal changes to the LED and switching circuit. Changes will be made to the position of the switching devices, placing them slightly closer to each other to reduce transmission line length. The LED will likely remain as the LC LED UT-67UV365P 365nm 0805 LED, but further LED tests will be performed. This takes a short amount of time, and may lead to discovering better LEDs in the future which would be easy to swap in due to standardised footprints.
 
-\subsubsection{LVDS-to-TTL converter}
+\subsubsection{LVDS-to-TTL Converter}
 
 No changes are expected to this circuit.
 
-\subsubsection{Power supplies}
+\subsubsection{Power Supplies}
 
 Reverse voltage bias will be removed as no difference between normal and reverse bias was observed photon output. The overcurrent protection and power enable circuit will be reworked.
 
@@ -531,7 +947,7 @@ Reverse voltage bias will be removed as no difference between normal and reverse
 
 No changes are expected to this.
 
-\subsubsection{Fibre coupler}
+\subsubsection{Fibre Coupler}
 
 A brand new fibre coupler will be designed due to the recent requirement changes regarding the different fibre lengths.
 
@@ -562,6 +978,8 @@ The pulse control data structure is currently under development. There are two t
 
 Each LED channel will be controlled independently, allowing for unique pulse configurations across channels. The global trigger will be derived from the system clock, and each channel will pulse in a predefined sequence while triggered from the global trigger. This architecture also supports simultaneous pulsing of multiple channels. Should asynchronous behaviour be required, additional per-channel delay logic can be implemented. Given the five distinct fibre lengths used in the system, each channel group will also include a configurable delay offset to compensate for propagation time differences. These group delays will be calibrated and fixed, with the option of fine-tuning individual channels post-deployment if necessary.
 
+The repetition rate can be adjusted as well, including a single pulse, using external trigger, from 0.001Hz through 1~kHz to multiple megahertz if needed, but the system was only tested up to  30~kHz, as that was a high enough rate to illuminate the power monitor's sensor.
+
 The FPGA programming remains in active development. Inter-crate communication protocols and synchronisation are currently under integration and testing.
 
 \section{Crate Electronics}\label{sec:crate}
@@ -575,6 +993,8 @@ To achieve this, a system concept originally developed by ATLAS collaborators (s
 Each FPGA is capable of interfacing with up to 38 pulser boards, thereby maximising the utilisation of available LVDS differential pairs, with an additional pair reserved for the laser trigger signal. This configuration ensures full use of the Genesys 2’s I/O capacity while maintaining flexibility for future expansion.
 
 The system architecture consists of three primary components: the Blade (\cref{blade}), Backplane (\cref{backplane}) and Eurocard (\cref{eurocard}). This modular approach ensures scalability and facilitates debugging, replacement, and upgrades. It also provides a robust foundation for managing high channel counts while maintaining signal integrity and synchronisation across the system.
+
+The system will consist of four crates, which allows for up to 144 pulser boards. The OD diffuser system requires 122 boards to run, and the auto-Xenon calibration system is expected to use one or two of the additional boards. This means there will be 20 spare boards available for hot-swapping. These can be further grouped into five sets of four, to have four spare boards for each of the five different fibre lengths. Should issues arise, a local technician can remove the signal and monitor fibres from the broken pulser board, attach them to a spare board, and reconfigure the software to use the spare board for running, all with remote expert guidance. The next time an expert is on site they can do further maintenance or repair if needed.
 
 \subsection{Blade}\label{blade}
 
@@ -622,11 +1042,12 @@ For laser synchronisation, the Eurocard includes a differential-to-NIM conversio
 
 
 
+\section{Summary}
 
-\section{Conclusions}
+This document has presented the development of a calibration system for the Hyper-K OD, focussing primarily on the array of diffusers which are powered by custom designed LED pulser boards. Through a series of optimisations, a maximum yield of $2.4\times10^7$ photons per pulse is obtained, after attenuation by 181~m of fibre optic cable with multiple connectors. This is achieved while keeping the pulse width under 10~ns, which was a design requirement. Saturation studies performed using Monte Carlo simulation show that this is sufficient to saturate the majority of OD PMTs, with up to 86\% of PMTs in the barrel region within the saturation limit for $10\times10^6$ injected photons per pulse out of the diffuser. The electronics used to produce the mentioned light pulses are in a mature state of design, with board production expected to begin in the near future.
 
-Write this
-
+Results are also presented on the sensitivity of OD collimators to changes in absorption, Rayleigh scattering, and Tyvek reflectivity. These suggest that for a barrel collimator sensitivity at the 99\% confidence level can be achieved for changes in reflectivity at the sub-percent level, a reduction in the absorption length of 20\% can be
+detected at the 95\% confidence level, and a change in the scattering length can be detected at the 99\% confidence level within a few percent of the nominal value.
 
 
 \appendix
