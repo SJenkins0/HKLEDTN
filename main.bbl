@@ -32,7 +32,7 @@
     \strng{fullhash}{JS+1}
     \field{labelnamesource}{author}
     \field{labeltitlesource}{title}
-    \field{title}{{HK} {LI} {F}ibre {S}pecifications}
+    \field{title}{{HK} {LI} {F}ibre and {L}aser {S}pecifications}
     \list{location}{1}{%
       {HK-TN-0091}%
     }
@@ -235,7 +235,7 @@
     \strng{fullhash}{BN+1}
     \field{labelnamesource}{author}
     \field{labeltitlesource}{title}
-    \field{title}{{LED}-m{PMT}s for Hyper{K}}
+    \field{title}{{LED}-m{PMT}s for {H}yper{K}}
     \list{location}{1}{%
       {HK-TN-0052}%
     }
