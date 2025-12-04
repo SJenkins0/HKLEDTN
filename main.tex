@@ -99,6 +99,7 @@
 \section{Version history}
 \begin{itemize}
 \item v1 - First version released to the collaboration.
+\item v1.1 - Add results of testing for untriggered LED pulses.
 \end{itemize}
 
 \newpage
@@ -916,6 +917,28 @@ As discussed in \cref{sec:overview}, one of the primary requirements of the OD d
 To provide a realistic amount of attenuation and dispersion, several FP400URT fibres were connected in series using Thorlabs ADAFC1 FC-FC mating sleeves. Combining a 1~m patch fibre with a 35~m, 40~m and 105~m reel equated to a total of 181~m with three mating sleeves, $\sim10$~m greater than the expected maximum fibre distance in reality. One end of the chain of fibres was connected to the LED board via a prototype fibre coupler, which holds the fibre end directly against the LED. To improve collection efficiency, the cavity was filled with Thorlabs G608N3 index matching gel. The other end of the fibre chain was connected to either a Hamamatsu H10721-210 PMT or a Thorlabs PM100USB with a S150C sensor, for timing or power measurements respectively.
 
 The LED board was set at 12~V, the current highest voltage output. The fibre was first connected to the PMT, to confirm that the pulse width was sub-10~ns. The power was then measured by the power meter. From this test, the maximum recorded light yield was found to be $2.4\times10^7$ photons per pulse. Further data was taken to investigate the dynamic range associated with changing pulse width and voltage, however in migrating lab PCs this has been lost, and will be retaken with the most recent versions of the hardware. Despite this, these numbers show that the system is capable of producing a large number of photons per pulse (ppp). In \cref{sec:collimator_studies} an output of $2\times10^7$ ppp was shown to yield up to 86\% saturation in the barrel region.
+
+\subsection{Untriggered Emission Test}\label{sec:untriggered}
+
+It is important to ensure that all LED pulses, and therefore injections into the HK tank, come only when requested. If errant pulses occur without a trigger signal being sent, these could be injected without associated calibration tags, and potentially be mistaken for physics events.
+
+In order to ensure that this does not happen with the developed electronics, the same procedure as was applied for the untriggered laser emission tests in \cite{TN91} was followed. The pulser board was set up as usual, and powered on via the motherboard, but no signal to pulse sent. The board was connected to 181~m of FP400URT fibre, which in turn was connected to a PMT. To ensure that the PMT gain and threshold on the oscilloscope were set correctly, a set of pulses were first triggered for calibration purposes. This can be seen in \cref{fig:singlepulse}, and also serves to show what should be expected on the oscilloscope if errant pulses are observed. 
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{ledtestpulsereal.png}
+    \caption{Scope trace and statistics for `calibration' pulses before performing the untriggered LED emission test.}
+    \label{fig:singlepulse}
+\end{figure}
+Once the triggering had been disabled, the oscilloscope was re-zeroed, and the test setup left for seven days. With the scope set to infinite persistence, any signal the scope triggered on would remain, and the measurement table would show a count of how many separate signals there had been.
+
+A screenshot of the oscilloscope screen after being left for a week is given in \cref{fig:nopulse}.
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{Lednopulsenoise.png}
+    \caption{Scope trace and statistics after one week of not triggering the LED. The single detected signal is noise.}
+    \label{fig:nopulse}
+\end{figure}
+This shows that one signal was observed in this period, however it can clearly be seen from the ringing structure that this is simply noise. The optics lab in which these measurements are carried out is not completely quiet, and these signals will occur occasionally. As this is the only signal that was observed, it is clear that no errant pulses were observed from the LED. 
 
 
 \subsection{Production}
