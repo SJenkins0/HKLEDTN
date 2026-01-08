@@ -91,7 +91,7 @@
 \affil[3]{University of Warwick}
 
 \date{\today\\
-{\bf Version 1.1}}
+{\bf Version 1.2}}
 
 \maketitle
 
@@ -103,6 +103,7 @@
 \begin{itemize}
 \item v1 - First version released to the collaboration.
 \item v1.1 - Add results of testing for untriggered LED pulses.
+\item v1.2 - Include designs of the LED electronics crate and overall rack layouts, as requested by review committee.
 \end{itemize}
 
 \newpage
@@ -980,7 +981,16 @@ A brand new fibre coupler will be designed due to the recent requirement changes
 
 \section{Server Rack and Cooling}
 
-To house the electronics for the LI systems, two 42U server racks with 800~mm depth will be used. The front of the server rack will be used for electrical connections and displays, and the reverse/internal will be used only for fibre routing. The server racks will include Uninterruptible Power Supplies (UPS) for safe power delivery and for power processing, to avoid issues with potential instabilities in the main power supply. Each rack will include an air conditioning unit to have a controlled temperature and remove humidity from the air, as the relative humidity in the air is expected to be above 70\%. Although specific tests on running the LED electronics in humid conditions have not been carried out, it is known that the optical switches for the laser calibration system requires lower humidity levels. In order to simplify things and remove the potential of humidity issues with the LED electronics,  both server racks will be air conditioned. These systems are widely available and will be chosen closer to installation.
+To house the electronics for the LI systems, two 42~U server racks with 800~mm depth will be used. 1~U, or rack unit, is a standardised measurement defined as 44.45~mm (1.75~in). The front of the server rack will be used for electrical connections and displays, and the reverse/internal will be used only for fibre routing. The server racks will include Uninterruptible Power Supplies (UPS) for safe power delivery and for power processing, to avoid issues with potential instabilities in the main power supply. Each rack will include an air conditioning unit to have a controlled temperature and remove humidity from the air, as the relative humidity in the air is expected to be above 70\%. Although specific tests on running the LED electronics in humid conditions have not been carried out, it is known that the optical switches for the laser calibration system requires lower humidity levels. In order to simplify things and remove the potential of humidity issues with the LED electronics, both server racks will be air conditioned. These systems are widely available and will be chosen closer to installation.
+
+A preliminary arrangement of all units within the two server racks is shown in \cref{fig:serverrack}. One of these racks will also house electronics for the photogrammetry and Korean LI systems. As such, the exact space requirements from those groups is currently unknown. However, the 24~U empty space should be more than enough the accommodate those two systems. Once further information on those systems is available, this design will be further refined.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.8\textwidth]{ServerRacks.png}
+    \caption{Preliminary arrangement of the two 42~U server racks used to house the laser and LED electronics, along with those for the photogrammetry and Korean LI systems.}
+    \label{fig:serverrack}
+\end{figure}
 
 \section{LED Monitoring}
 
@@ -1066,7 +1076,31 @@ For laser synchronisation, the Eurocard includes a differential-to-NIM conversio
 \caption{Eurocard Work in Progress\label{fig:EurocardWIP}}
 \end{figure}
 
+\subsection{Overall Crate Design}\label{cratedesign}
 
+\cref{fig:cratedesign} shows how an assembled LED crate will look, from various angles.
+
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}{0.5\textwidth}
+            \includegraphics[width=\textwidth]{FullCrateTopView}
+            \subcaption{Top view}
+    \end{subfigure}%   
+\begin{subfigure}{0.5\textwidth}
+            \includegraphics[width=\textwidth]{FullCrateFibresideView}
+            \subcaption{Front view}
+    \end{subfigure}\\
+        \begin{subfigure}{0.5\textwidth}
+            \includegraphics[width=\textwidth]{FullCrateFibresidethreeqView}
+            \subcaption{Side view}
+    \end{subfigure}%
+\begin{subfigure}{0.5\textwidth}
+            \includegraphics[width=\textwidth]{FullCrateRackdoorView}
+            \subcaption{Back side view}
+    \end{subfigure}
+    \caption{3D rendering of an LED electronics crate with all boards and 3D printed fibre connectors installed.}
+    \label{fig:cratedesign}
+\end{figure}
 
 \section{Summary}
 
