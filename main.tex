@@ -17,7 +17,7 @@
 \usepackage[export]{adjustbox}
 
 \usepackage{rotating}
-
+\usepackage{booktabs}
 \usepackage{caption}
 \usepackage{subcaption}
 \usepackage{titlesec}
@@ -104,6 +104,7 @@
 \item v1 - First version released to the collaboration.
 \item v1.1 - Add results of testing for untriggered LED pulses.
 \item v1.2 - Include designs of the LED electronics crate and overall rack layouts, as requested by review committee.
+\item v1.3 - Add section on gate driver selection
 \end{itemize}
 
 \newpage
@@ -738,7 +739,7 @@ Further discussion regarding the implementation and performance of the variable 
 \end{figure}
 
 
-\subsubsection{Switch Selection}
+\subsubsection{Switch Selection}\label{switchselection}
 
 The previous iteration of the pulser board utilised a BFR92 \cite{BFR92} high-speed RF NPN switching transistor which was directly driven by a LVDS-to-TTL converter. In the redesign phase, alternative circuit topologies were explored—particularly those suitable for generating (sub-)nanosecond pulses. This investigation led to the adoption of gate driver circuits. Gate drivers are advantageous not only because they can power switches with challenging drive requirements, but also because sub-nanosecond electrical pulses can be achieved by modulating the enable pin with slight timing offsets.
 
@@ -789,6 +790,29 @@ Additionally, two 0508 reverse-topology 100~nF capacitors have been incorporated
 \includegraphics[scale=0.3]{RCTHTest1 inductor circuit.png}
 \caption{Pulsing Circuit With Inductor and Resistor\label{fig:RLPulse}}
 \end{figure}
+
+
+\subsubsection{Gate Driver Selection}
+
+The EPC8004 is a suitable choice for a switch but to fully utilise this device we need a gate driver that can output a suitable current to drive the GaNFET. The specification required a sub-1~ns pulse, which means a combined rise and fall time has to be less than 1~ns to achieve said pulse width. Another requirement was for the component to be readily available and not to be end-of-life.
+Through market research, the Texas Instruments LMG line was identified as a good fit for these requirements. They offered multiple devices in the lineup, listed in \cref{tab:LMGFamily}, and the LMG1020 was the most suitable based on number of output channels and timing features. The LMG1020 driver was ordered for use with pulser board prototypes, and was found to drive various switches well, as described in \cref{switchselection}. For these reasons, the LMG1020 driver was chosen.
+
+\begin{table}[h]
+  \centering
+  \caption{Texas Instrument LMG family of devices}
+  \label{tab:LMGFamily}
+  \begin{tabular}{l | c | c | c}
+    \toprule
+    Part number & Output Channels & Rise Time [ps] & Fall Time [ps] \\
+    \midrule
+    LMG1020    & 1      & 375 & 350     \\
+    LMG1210    & 2      & 500 & 500    \\
+    LMG1025   & 1      & 650 & 850     \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+
 
 %Check for diikey LED, that will will be in the future and check for LED part numbers
 \subsubsection{Testing}\label{sec:LEDtesting}
