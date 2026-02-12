@@ -1,0 +1,92 @@
+This is BibTeX, Version 0.99d (TeX Live 2022)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: diff_v1.3.aux
+The style file: biblatex.bst
+Reallocated glb_str_ptr (elt_size=4) to 20 items from 10.
+Reallocated global_strs (elt_size=200001) to 20 items from 10.
+Reallocated glb_str_end (elt_size=4) to 20 items from 10.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Database file #1: diff_v1.3-blx.bib
+Database file #2: biblio.bib
+Warning--I didn't find a database entry for "TN91"
+Warning--I didn't find a database entry for "FP400URT"
+Warning--I didn't find a database entry for "TN64"
+Warning--I didn't find a database entry for "WCSim"
+Warning--I didn't find a database entry for "TN42"
+Warning--I didn't find a database entry for "FR-4"
+Warning--I didn't find a database entry for "BFR92"
+Warning--I didn't find a database entry for "LMG1020"
+Warning--I didn't find a database entry for "TN52"
+Warning--I didn't find a database entry for "EPC2012"
+Warning--I didn't find a database entry for "EPC8004"
+Warning--I didn't find a database entry for "ATS2012UV385"
+Warning--I didn't find a database entry for "H10721-210"
+Warning--I didn't find a database entry for "EPCHSGuide"
+Warning--I didn't find a database entry for "ut-67uv365p"
+Warning--I didn't find a database entry for "DS90C402"
+Warning--I didn't find a database entry for "LT1963"
+Warning--I didn't find a database entry for "LM2347-5"
+Warning--I didn't find a database entry for "1331962"
+Warning--I didn't find a database entry for "Genesys2"
+Warning--I didn't find a database entry for "KM6-2"
+Warning--I didn't find a database entry for "SamtecSeam"
+Warning--I didn't find a database entry for "1332120"
+Warning--I didn't find a database entry for "THD121212"
+Warning--I didn't find a database entry for "PCA9698"
+Warning--I didn't find a database entry for "AD5673"
+Biblatex version: 3.17
+Reallocated wiz_functions (elt_size=4) to 9000 items from 6000.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+You've used 1 entry,
+            6399 wiz_defined-function locations,
+            1252 strings with 9321 characters,
+and the built_in function-call counts, 1522 in all, are:
+= -- 72
+> -- 70
+< -- 1
++ -- 49
+- -- 28
+* -- 31
+:= -- 368
+add.period$ -- 0
+call.type$ -- 1
+change.case$ -- 0
+chr.to.int$ -- 42
+cite$ -- 0
+duplicate$ -- 11
+empty$ -- 103
+format.name$ -- 0
+if$ -- 322
+int.to.chr$ -- 0
+int.to.str$ -- 0
+missing$ -- 0
+newline$ -- 20
+num.names$ -- 0
+pop$ -- 47
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 77
+stack$ -- 0
+substring$ -- 151
+swap$ -- 1
+text.length$ -- 20
+text.prefix$ -- 0
+top$ -- 1
+type$ -- 22
+warning$ -- 0
+while$ -- 64
+width$ -- 0
+write$ -- 20
+(There were 26 warnings)
